@@ -1,0 +1,97 @@
+/* General Container Styling */
+.contractorContainer {
+    font-family: Arial, sans-serif;
+    color: #333;
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  /* Header Styling */
+  h1 {
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 20px;
+    color: #007bff; /* Blue color for emphasis */
+  }
+  
+  /* Error Message Styling */
+  .errorMessage {
+    color: red;
+    font-size: 1rem;
+    margin-bottom: 10px;
+  }
+  
+  /* Tasks List Styling */
+  .tasksList {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .tasksList h2 {
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+    color: #333;
+  }
+  
+  .tasksList ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .tasksList li {
+    background: #f9f9f9;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+  
+  .tasksList li strong {
+    font-weight: bold;
+    color: #007bff; /* Highlight project names */
+  }
+  
+  .tasksList li span {
+    color: #555;
+    font-size: 0.9rem;
+  }
+  
+  /* Buttons Styling */
+  button {
+    background-color: #28a745; /* Green button for submission */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  button:hover {
+    background-color: #218838; /* Darker green on hover */
+  }
+  
+  button:disabled {
+    background-color: #ccc; /* Grayed-out when disabled */
+    cursor: not-allowed;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .contractorContainer {
+      padding: 10px;
+    }
+  
+    .tasksList li {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }

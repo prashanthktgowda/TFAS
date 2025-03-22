@@ -1,0 +1,97 @@
+/* General Container Styling */
+.auditorContainer {
+    font-family: Arial, sans-serif;
+    color: #333;
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  /* Header Styling */
+  h1 {
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 20px;
+    color: #007bff; /* Blue color for emphasis */
+  }
+  
+  /* Error Message Styling */
+  .errorMessage {
+    color: red;
+    font-size: 1rem;
+    margin-bottom: 10px;
+  }
+  
+  /* Audits List Styling */
+  .auditList {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .auditList h2 {
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+    color: #333;
+  }
+  
+  .auditList ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .auditList li {
+    background: #f9f9f9;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+  
+  .auditList li strong {
+    font-weight: bold;
+    color: #007bff; /* Highlight project names */
+  }
+  
+  .auditList li span {
+    color: #555;
+    font-size: 0.9rem;
+  }
+  
+  /* Buttons Styling */
+  button {
+    background-color: #ffc107; /* Yellow button for approval */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  button:hover {
+    background-color: #e0a800; /* Darker yellow on hover */
+  }
+  
+  button:disabled {
+    background-color: #ccc; /* Grayed-out when disabled */
+    cursor: not-allowed;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .auditorContainer {
+      padding: 10px;
+    }
+  
+    .auditList li {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }

@@ -1,0 +1,102 @@
+/* General Container Styling */
+.citizenContainer {
+    font-family: Arial, sans-serif;
+    color: #333;
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  /* Header Styling */
+  h1 {
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 20px;
+    color: #007bff; /* Blue color for emphasis */
+  }
+  
+  /* Error Message Styling */
+  .errorMessage {
+    color: red;
+    font-size: 1rem;
+    margin-bottom: 10px;
+  }
+  
+  /* Projects List Styling */
+  .projectsList {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .projectsList h2 {
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+    color: #333;
+  }
+  
+  .projectsList ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .projectsList li {
+    background: #f9f9f9;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+  
+  .projectsList li strong {
+    font-weight: bold;
+    color: #007bff; /* Highlight project names */
+  }
+  
+  .projectsList li textarea {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+    resize: vertical;
+  }
+  
+  .projectsList li button {
+    background-color: #28a745; /* Green button for submission */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 10px;
+  }
+  
+  .projectsList li button:hover {
+    background-color: #218838; /* Darker green on hover */
+  }
+  
+  .projectsList li button:disabled {
+    background-color: #ccc; /* Grayed-out when disabled */
+    cursor: not-allowed;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .citizenContainer {
+      padding: 10px;
+    }
+  
+    .projectsList li {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }

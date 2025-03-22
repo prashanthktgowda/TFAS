@@ -1,17 +1,22 @@
-// server.js
+// Import required modules
+require('dotenv').config(); // Load environment variables
 const express = require('express');
-const routes = require('./routes'); // Import routes
+const cors = require('cors');
 
+// Initialize the app
 const app = express();
-const PORT = process.env.PORT || 3000;
 
 // Middleware
+app.use(cors());
 app.use(express.json());
 
-// Routes
-app.use('/api', routes);
+// Define a simple test route
+app.get('/', (req, res) => {
+  res.send('TFAS Backend is running on port 5000!');
+});
 
 // Start the server
+const PORT = process.env.PORT || 5000; // Use port 5000 or fallback to 5000 if not defined
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });

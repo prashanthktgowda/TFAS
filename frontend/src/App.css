@@ -20,10 +20,18 @@
   background-color: #003366;
   color: white;
   padding: 1rem 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .header .logo {
   height: 50px;
+}
+
+.header h1 {
+  margin: 0;
+  font-size: 1.5rem;
 }
 
 .nav {
@@ -32,9 +40,9 @@
 }
 
 .nav a {
-  color: white;
   text-decoration: none;
   font-weight: bold;
+  transition: color 0.3s ease;
 }
 
 .nav a:hover {
@@ -46,57 +54,6 @@
   flex: 1;
   padding: 2rem;
   background-color: #ffffff;
-}
-
-.hero {
-  text-align: center;
-  padding: 2rem 0;
-}
-
-.cta-buttons {
-  display: flex;
-  justify-content: center;
-  gap: 1rem;
-  margin-top: 1rem;
-}
-
-.cta-buttons button {
-  padding: 0.75rem 1.5rem;
-  background-color: #007BFF;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.cta-buttons button:hover {
-  background-color: #0056b3;
-}
-
-/* Sections */
-.section {
-  margin-bottom: 2rem;
-}
-
-.objectives-grid,
-.benefits-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 1rem;
-}
-
-.workflow-steps {
-  list-style-type: decimal;
-  padding-left: 1.5rem;
-}
-
-.workflow-steps li {
-  margin-bottom: 1rem;
-}
-
-.impact-list {
-  list-style-type: disc;
-  padding-left: 1.5rem;
 }
 
 /* Footer Section */

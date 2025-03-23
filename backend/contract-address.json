@@ -1,0 +1,6 @@
+{
+  "address": "0x81Fa56F8A0462d7946Db4Ed4c0654d7756DCFE9d",
+  "network": "ganache",
+  "deployer": "0x9B20Eb3374312715e9D47650d4DfEC0082f667Be",
+  "chainId": 1337
+}

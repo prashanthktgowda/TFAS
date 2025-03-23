@@ -20,22 +20,27 @@ exports.getFunds = async (req, res) => {
 };
 
 // Allocate funds
-exports.allocateFunds = (req, res) => {
+exports.allocateFunds = async (req, res) => {
   const { amount } = req.body;
-  if (amount > totalFunds) {
-    return res.status(400).json({ error: 'Insufficient funds' });
+  try {
+    // Interact with the blockchain to allocate funds
+    await contract.methods.allocateFunds(amount).send({ from: process.env.ADMIN_ACCOUNT });
+    res.json({ message: 'Funds allocated successfully' });
+  } catch (error) {
+    console.error('Error allocating funds:', error);
+    res.status(500).json({ error: 'Failed to allocate funds' });
   }
-  allocatedFunds += amount;
-  res.json({ message: 'Funds allocated successfully', allocatedFunds });
 };
 
 // Complete milestone
-exports.completeMilestone = (req, res) => {
+exports.completeMilestone = async (req, res) => {
   const { amount } = req.body;
-  if (amount > allocatedFunds) {
-    return res.status(400).json({ error: 'Cannot spend more than allocated funds' });
+  try {
+    // Interact with the blockchain to complete a milestone
+    await contract.methods.completeMilestone(amount).send({ from: process.env.ADMIN_ACCOUNT });
+    res.json({ message: 'Milestone completed successfully' });
+  } catch (error) {
+    console.error('Error completing milestone:', error);
+    res.status(500).json({ error: 'Failed to complete milestone' });
   }
-  spentFunds += amount;
-  allocatedFunds -= amount;
-  res.json({ message: 'Milestone completed successfully', spentFunds });
 };

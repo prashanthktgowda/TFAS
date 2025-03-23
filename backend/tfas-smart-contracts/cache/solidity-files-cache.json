@@ -1,0 +1,40 @@
+{
+  "_format": "hh-sol-cache-2",
+  "files": {
+    "/home/prashanthktgowda/academics_project/GFMS/TFAS/backend/tfas-smart-contracts/contracts/TFAS.sol": {
+      "lastModificationDate": 1742712055456,
+      "contentHash": "5060e2289592157832ecd29e62295576",
+      "sourceName": "contracts/TFAS.sol",
+      "solcConfig": {
+        "version": "0.8.19",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "TFAS"
+      ]
+    }
+  }
+}

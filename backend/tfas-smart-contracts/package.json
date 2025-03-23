@@ -1,0 +1,23 @@
+{
+  "name": "tfas-smart-contracts",
+  "version": "1.0.0",
+  "description": "TFAS Smart Contracts",
+  "main": "hardhat.config.js",
+  "scripts": {
+    "clean": "npx hardhat clean",
+    "compile": "npx hardhat compile",
+    "deploy": "npx hardhat run scripts/deploy.js --network ganache",
+    "test": "npx hardhat test",
+    "interact": "npx hardhat run scripts/interact.js --network ganache"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^2.0.2",
+    "@nomiclabs/hardhat-ethers": "^2.2.3",
+    "@nomiclabs/hardhat-waffle": "^2.0.6",
+    "chai": "^4.3.7",
+    "dotenv": "^16.0.3",
+    "ethereum-waffle": "^4.0.10",
+    "ethers": "^5.7.2",
+    "hardhat": "^2.14.0"
+  }
+}

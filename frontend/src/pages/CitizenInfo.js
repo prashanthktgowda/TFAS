@@ -32,7 +32,7 @@ const CitizenInfo = () => {
         // Initialize Contract Instance
         const instance = new web3.eth.Contract(
           contractABI,
-          '0x819EAfa7f98Ee03e9F9ECD4d7f0a33A8DD937815' // Replace with your deployed contract address
+          process.env.CONTRACT_ADDRESS // Use the contract address from .env
         );
         setContractInstance(instance);
 
@@ -76,6 +76,8 @@ const CitizenInfo = () => {
         .submitFeedback(projectId, feedback)
         .send({ from: account });
 
+      alert('Feedback submitted successfully');
+
       // Reload projects after feedback submission
       await loadProjects(contractInstance);
 
@@ -92,38 +94,47 @@ const CitizenInfo = () => {
   return (
     <div className={styles.citizenContainer}>
       {/* Header */}
-      <h1>Citizen Information Page</h1>
-      <p>View government spending, track project progress, and provide feedback.</p>
+      <header className={styles.header}>
+        <h1>Citizen Information Page</h1>
+        <p>View government spending, track project progress, and provide feedback.</p>
+      </header>
 
       {/* Error Message */}
       {error && <p className={styles.errorMessage}>{error}</p>}
 
       {/* Loading Indicator */}
-      {loading && <p>Loading...</p>}
+      {loading && <p className={styles.loading}>Loading...</p>}
 
       {/* Projects List */}
-      <div className={styles.projectsList}>
+      <section className={styles.projectsList}>
         <h2>Ongoing Projects</h2>
         {projects.length > 0 ? (
-          <ul>
+          <ul className={styles.projectItems}>
             {projects.map((project, index) => (
-              <li key={index}>
-                <strong>{project.name}</strong> - Budget: ₹{project.budget}, Progress: {project.progress}%
+              <li key={index} className={styles.projectItem}>
+                <div>
+                  <strong>{project.name}</strong> - Budget: ₹{project.budget}, Progress: {project.progress}%
+                </div>
                 <textarea
                   placeholder="Provide feedback"
                   value={feedback}
                   onChange={(e) => setFeedback(e.target.value)}
+                  className={styles.feedbackInput}
                 />
-                <button onClick={() => submitFeedback(project.id)} disabled={loading}>
+                <button
+                  onClick={() => submitFeedback(project.id)}
+                  disabled={loading}
+                  className={styles.submitButton}
+                >
                   {loading ? 'Submitting...' : 'Submit Feedback'}
                 </button>
               </li>
             ))}
           </ul>
         ) : (
-          <p>No projects available.</p>
+          <p className={styles.noProjects}>No projects available.</p>
         )}
-      </div>
+      </section>
     </div>
   );
 };

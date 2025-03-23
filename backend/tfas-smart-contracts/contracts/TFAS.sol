@@ -2,6 +2,12 @@
 pragma solidity ^0.8.0;
 
 contract TFAS {
+    // Events
+    event ProjectCreated(uint indexed projectId, string name, address owner);
+    event ProjectStatusUpdated(uint indexed projectId, string newStatus);
+    event FeedbackSubmitted(uint indexed projectId, string feedback);
+    event InvoiceGenerated(uint indexed projectId, uint milestoneId, uint amount, address contractor);
+    
     // Struct to represent a Project
     struct Project {
         uint id;           // Unique ID for the project
@@ -10,6 +16,7 @@ contract TFAS {
         string status;     // Current status of the project (e.g., "In Progress", "Completed")
         string[] feedbacks; // Array to store feedback for the project
         string timeline;   // Timeline or duration of the project
+        address owner;     // Added owner field
     }
 
     // Array to store all projects
@@ -20,6 +27,9 @@ contract TFAS {
 
     // Array to store notifications (e.g., updates or milestones)
     string[] public notifications;
+
+    // Mapping from project ID to owner address
+    mapping(uint => address) public projectOwners;
 
     /**
      * @dev Constructor to initialize the contract.
@@ -41,8 +51,10 @@ contract TFAS {
     ) public {
         require(_budget > 0, "Budget must be greater than zero");
         projectId++;
-        projects.push(Project(projectId, _name, _budget, "In Progress", new string[](0), _timeline));
+        projects.push(Project(projectId, _name, _budget, "In Progress", new string[](0), _timeline, msg.sender));
+        projectOwners[projectId] = msg.sender;
         addNotification(string(abi.encodePacked("New project created: ", _name)));
+        emit ProjectCreated(projectId, _name, msg.sender);
     }
 
     /**
@@ -54,6 +66,15 @@ contract TFAS {
     }
 
     /**
+     * @dev Function to get a specific project by ID.
+     * @param _projectId The ID of the project to retrieve.
+     */
+    function getProjectById(uint _projectId) public view returns (Project memory) {
+        require(_projectId > 0 && _projectId <= projectId, "Invalid project ID");
+        return projects[_projectId - 1];
+    }
+
+    /**
      * @dev Function to submit feedback for a specific project.
      * @param _projectId The ID of the project.
      * @param _feedback The feedback message.
@@ -62,6 +83,30 @@ contract TFAS {
         require(_projectId > 0 && _projectId <= projectId, "Invalid project ID");
         projects[_projectId - 1].feedbacks.push(_feedback);
         addNotification(string(abi.encodePacked("Feedback received for project ID ", uint2str(_projectId))));
+        emit FeedbackSubmitted(_projectId, _feedback);
+    }
+
+    /**
+     * @dev Function to update project status.
+     * @param _projectId The ID of the project.
+     * @param _newStatus The new status to set.
+     */
+    function updateProjectStatus(uint _projectId, string memory _newStatus) public {
+        require(_projectId > 0 && _projectId <= projectId, "Invalid project ID");
+        require(projectOwners[_projectId] == msg.sender, "Only project owner can update status");
+        
+        projects[_projectId - 1].status = _newStatus;
+        addNotification(string(abi.encodePacked("Project ", uint2str(_projectId), " status updated to: ", _newStatus)));
+        emit ProjectStatusUpdated(_projectId, _newStatus);
+    }
+
+    /**
+     * @dev Function to get all feedbacks for a specific project.
+     * @param _projectId The ID of the project.
+     */
+    function getProjectFeedbacks(uint _projectId) public view returns (string[] memory) {
+        require(_projectId > 0 && _projectId <= projectId, "Invalid project ID");
+        return projects[_projectId - 1].feedbacks;
     }
 
     /**
@@ -78,6 +123,34 @@ contract TFAS {
      */
     function getNotifications() public view returns (string[] memory) {
         return notifications;
+    }
+
+    /**
+     * @dev Function to calculate the total funds allocated across all projects.
+     * @return The total budget of all projects.
+     */
+    function totalFunds() public view returns (uint) {
+        require(projects.length > 0, "No projects available to calculate total funds.");
+        uint total = 0;
+        for (uint i = 0; i < projects.length; i++) {
+            total += projects[i].budget;
+        }
+        return total;
+    }
+
+    /**
+     * @dev Function to generate an invoice for a specific milestone.
+     * @param _projectId The ID of the project.
+     * @param _milestoneId The ID of the milestone.
+     * @param _amount The amount for the invoice.
+     */
+    function generateInvoice(uint _projectId, uint _milestoneId, uint _amount) public {
+        require(_projectId > 0 && _projectId <= projectId, "Invalid project ID");
+        require(_amount > 0, "Amount must be greater than zero");
+        require(projectOwners[_projectId] == msg.sender, "Only the project owner can generate an invoice");
+
+        // Emit the invoice generation event
+        emit InvoiceGenerated(_projectId, _milestoneId, _amount, msg.sender);
     }
 
     /**

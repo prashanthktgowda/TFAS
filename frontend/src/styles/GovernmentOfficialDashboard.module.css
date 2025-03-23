@@ -1,120 +1,153 @@
-/* General Container Styling */
+/* Global Styles */
 .dashboardContainer {
-    font-family: Arial, sans-serif;
-    color: #333;
-    padding: 20px;
-    max-width: 1200px;
-    margin: 0 auto;
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: #f9f9f9;
+  color: #333;
+}
+
+/* Header Styles */
+.header {
+  background-color: #003366;
+  color: white;
+  text-align: center;
+  padding: 1rem 0;
+  margin-bottom: 20px;
+}
+
+.header h1 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+/* Error Message Styles */
+.errorMessage {
+  color: red;
+  text-align: center;
+  margin-top: 1rem;
+}
+
+.error {
+  color: red;
+}
+
+/* Loading Indicator Styles */
+.loading {
+  text-align: center;
+  margin-top: 1rem;
+  font-style: italic;
+  color: blue;
+}
+
+/* Project Form Styles */
+.projectForm {
+  margin: 2rem auto;
+  max-width: 600px;
+  padding: 1rem;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.projectForm h2 {
+  text-align: center;
+  margin-bottom: 1rem;
+  color: #003366;
+}
+
+.formGroup {
+  margin-bottom: 1rem;
+}
+
+.inputField {
+  width: 100%;
+  padding: 0.75rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  transition: border-color 0.3s ease;
+}
+
+.inputField:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+.createButton {
+  width: 100%;
+  padding: 0.75rem;
+  font-size: 1rem;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.createButton:hover {
+  background-color: #0056b3;
+}
+
+.createButton:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+/* Projects List Styles */
+.projectsList {
+  margin: 2rem auto;
+  max-width: 600px;
+  padding: 1rem;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.projectsList h2 {
+  text-align: center;
+  margin-bottom: 1rem;
+  color: #003366;
+}
+
+.projectItems {
+  list-style-type: none;
+  padding: 0;
+}
+
+.projectItem {
+  padding: 0.75rem;
+  margin-bottom: 0.5rem;
+  background-color: #f0f8ff;
+  border-radius: 4px;
+  border-left: 4px solid #007bff;
+}
+
+.noProjects {
+  text-align: center;
+  font-style: italic;
+  color: #666;
+}
+
+/* Sections Styles */
+.createProjectSection,
+.projectsSection,
+.reportsSection {
+  margin-bottom: 20px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .dashboardContainer {
+    padding: 1rem;
   }
-  
-  /* Header Styling */
-  h1 {
-    text-align: center;
-    font-size: 2rem;
-    margin-bottom: 20px;
-    color: #007bff; /* Blue color for emphasis */
-  }
-  
-  /* Error Message Styling */
-  .errorMessage {
-    color: red;
-    font-size: 1rem;
-    margin-bottom: 10px;
-  }
-  
-  /* Project Form Styling */
-  .projectForm {
-    background: #f9f9f9;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    margin-bottom: 20px;
-  }
-  
-  .projectForm h2 {
-    font-size: 1.5rem;
-    margin-bottom: 15px;
-    color: #333;
-  }
-  
-  .projectForm input {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 15px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 1rem;
-  }
-  
-  .projectForm button {
-    background-color: #007bff; /* Blue button */
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    font-size: 1rem;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  .projectForm button:hover {
-    background-color: #0056b3; /* Darker blue on hover */
-  }
-  
-  /* Projects List Styling */
+
+  .projectForm,
   .projectsList {
-    background: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    max-width: 100%;
   }
-  
-  .projectsList h2 {
-    font-size: 1.5rem;
-    margin-bottom: 15px;
-    color: #333;
-  }
-  
-  .projectsList ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-  
-  .projectsList li {
-    background: #f9f9f9;
-    padding: 15px;
-    margin-bottom: 10px;
-    border-radius: 5px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  }
-  
-  .projectsList li strong {
-    font-weight: bold;
-    color: #007bff; /* Highlight project names */
-  }
-  
-  .projectsList li span {
-    color: #555;
-    font-size: 0.9rem;
-  }
-  
-  /* Responsive Design */
-  @media (max-width: 768px) {
-    .dashboardContainer {
-      padding: 10px;
-    }
-  
-    .projectForm input,
-    .projectForm button {
-      width: 100%;
-    }
-  
-    .projectsList li {
-      flex-direction: column;
-      align-items: flex-start;
-    }
-  }
+}

@@ -1,0 +1,35 @@
+version: "3.8"
+
+services:
+  mongodb:
+    image: mongo
+    container_name: mongodb
+    restart: always
+    ports:
+      - 27018:27017 # Changed host port to 27018
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: qwerty
+    networks:
+      - mongo-network
+
+  mongo-express:
+    image: mongo-express
+    container_name: mongo-express
+    restart: always
+    depends_on:
+      - mongodb
+    ports:
+      - 8081:8081
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: admin
+      ME_CONFIG_MONGODB_ADMINPASSWORD: qwerty
+      ME_CONFIG_MONGO_URL: mongodb://admin:qwerty@mongodb:27017/ # Ensure hostname is "mongodb"
+    networks:
+      - mongo-network
+    volumes:
+      - ./mongo-express-config.cjs:/app/config.js # Ensure correct file extension
+
+networks:
+  mongo-network:
+    driver: bridge

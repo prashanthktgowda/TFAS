@@ -1,47 +1,57 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import Web3 from 'web3';
-import contractABI from '/home/prashanthktgowda/academics_project/GFMS/TFAS/frontend/src/abi/contractABI.json'; // Ensure this path is correct
-import styles from '../styles/GovernmentOfficialDashboard.module.css'; // Ensure this path is correct
+import contractABI from '../abi/contractABI.json'; // Correct path to ABI
+import styles from '../styles/GovernmentOfficialDashboard.module.css';
+
+const contractAddress = process.env.REACT_APP_CONTRACT_ADDRESS; // Use the contract address from .env
+const blockchainProvider = process.env.REACT_APP_BLOCKCHAIN_PROVIDER || 'http://127.0.0.1:7545'; // Default to Ganache
 
 const GovernmentOfficialDashboard = () => {
-  // State Variables
-  const [projects, setProjects] = useState([]); // List of projects
-  const [newProjectName, setNewProjectName] = useState(''); // Input for new project name
-  const [newProjectBudget, setNewProjectBudget] = useState(''); // Input for new project budget
-  const [contractInstance, setContractInstance] = useState(null); // Smart contract instance
-  const [account, setAccount] = useState(''); // Connected Ethereum account
-  const [loading, setLoading] = useState(false); // Loading state for async operations
-  const [error, setError] = useState(''); // Error state for error handling
+  const [projects, setProjects] = useState([]);
+  const [newProject, setNewProject] = useState({ name: '', budget: '', timeline: '' });
+  const [milestoneRequests, setMilestoneRequests] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const contractInstance = useRef(null);
+  const account = useRef(null);
 
-  // Initialize Blockchain Connection
   useEffect(() => {
     const initBlockchain = async () => {
       try {
         setLoading(true);
         setError('');
 
+        console.log('Initializing blockchain connection...');
+
+        // Validate environment variables
+        if (!contractAddress) {
+          throw new Error('Contract address is not defined in the environment variables.');
+        }
+        if (!contractABI || !contractABI.abi) {
+          throw new Error('Invalid ABI. Please check the ABI file.');
+        }
+
         // Initialize Web3
-        const web3 = new Web3(Web3.givenProvider || 'http://127.0.0.1:7545'); // Ganache RPC URL
+        const web3Instance = new Web3(blockchainProvider);
+        console.log('Web3 instance created:', web3Instance);
+
+        // Initialize Contract Instance
+        contractInstance.current = new web3Instance.eth.Contract(contractABI.abi, contractAddress);
+        console.log('Contract instance initialized:', contractInstance.current);
 
         // Get Accounts
-        const accounts = await web3.eth.getAccounts();
+        const accounts = await web3Instance.eth.getAccounts();
         if (accounts.length === 0) {
           throw new Error('No Ethereum accounts found. Please connect MetaMask or use Ganache.');
         }
-        setAccount(accounts[0]);
-
-        // Initialize Contract Instance
-        const instance = new web3.eth.Contract(
-          contractABI,
-          '0x819EAfa7f98Ee03e9F9ECD4d7f0a33A8DD937815' // Replace with your deployed contract address
-        );
-        setContractInstance(instance);
+        account.current = accounts[0];
+        console.log('Connected account:', account.current);
 
         // Load Projects
-        await loadProjects(instance);
+        await loadProjects();
       } catch (err) {
         console.error('Error initializing blockchain:', err);
-        setError('Failed to connect to the blockchain. Please check your network.');
+        setError(err.message || 'Failed to connect to the blockchain.');
       } finally {
         setLoading(false);
       }
@@ -50,10 +60,11 @@ const GovernmentOfficialDashboard = () => {
     initBlockchain();
   }, []);
 
-  // Load Projects from Smart Contract
-  const loadProjects = async (instance) => {
+  const loadProjects = async () => {
     try {
-      const projectsData = await instance.methods.getProjects().call();
+      console.log('Fetching projects...');
+      const projectsData = await contractInstance.current.methods.getProjects().call();
+      console.log('Projects fetched:', projectsData);
       setProjects(projectsData);
     } catch (err) {
       console.error('Error fetching projects:', err);
@@ -61,10 +72,10 @@ const GovernmentOfficialDashboard = () => {
     }
   };
 
-  // Create a New Project
   const createProject = async () => {
-    if (!newProjectName || !newProjectBudget) {
-      setError('Please provide both a project name and budget.');
+    const { name, budget, timeline } = newProject;
+    if (!name || !budget || !timeline) {
+      setError('Please fill in all project details.');
       return;
     }
 
@@ -72,71 +83,139 @@ const GovernmentOfficialDashboard = () => {
       setLoading(true);
       setError('');
 
-      // Call the smart contract's createProject method
-      await contractInstance.methods
-        .createProject(newProjectName, newProjectBudget)
-        .send({ from: account });
+      console.log('Creating new project:', newProject);
 
-      // Reload projects after creation
-      await loadProjects(contractInstance);
+      await contractInstance.current.methods
+        .createProject(name, Web3.utils.toWei(budget, 'ether'), timeline)
+        .send({ from: account.current, gas: 3000000 }); // Set a higher gas limit
 
-      // Reset input fields
-      setNewProjectName('');
-      setNewProjectBudget('');
+      console.log('Project created successfully.');
+      setNewProject({ name: '', budget: '', timeline: '' });
+      await loadProjects();
     } catch (err) {
       console.error('Error creating project:', err);
-      setError('Failed to create the project. Please try again.');
+      setError('Failed to create project. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const approveMilestone = async (projectId, milestoneId) => {
+    try {
+      setLoading(true);
+      setError('');
+
+      console.log(`Approving milestone ${milestoneId} for project ${projectId}...`);
+
+      await contractInstance.current.methods
+        .approveMilestone(projectId, milestoneId)
+        .send({ from: account.current });
+
+      console.log('Milestone approved successfully.');
+      await loadProjects();
+    } catch (err) {
+      console.error('Error approving milestone:', err);
+      setError('Failed to approve milestone. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const rejectMilestone = async (projectId, milestoneId) => {
+    try {
+      setLoading(true);
+      setError('');
+
+      console.log(`Rejecting milestone ${milestoneId} for project ${projectId}...`);
+
+      await contractInstance.current.methods
+        .rejectMilestone(projectId, milestoneId)
+        .send({ from: account.current });
+
+      console.log('Milestone rejected successfully.');
+      await loadProjects();
+    } catch (err) {
+      console.error('Error rejecting milestone:', err);
+      setError('Failed to reject milestone. Please try again.');
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className={styles.dashboardContainer}>
-      {/* Header */}
-      <h1>Government Official Dashboard</h1>
+    <div className={styles.container}>
+      <header className={styles.header}>
+        <h1>Government Official Dashboard</h1>
+        <p>Manage and oversee projects efficiently.</p>
+      </header>
 
-      {/* Error Message */}
-      {error && <p className={styles.errorMessage}>{error}</p>}
+      {error && <p className={styles.error}>{error}</p>}
+      {loading && <p className={styles.loading}>Loading...</p>}
 
-      {/* Loading Indicator */}
-      {loading && <p>Loading...</p>}
-
-      {/* Create Project Form */}
-      <div className={styles.projectForm}>
+      {/* Create New Project */}
+      <section className={styles.createProjectSection}>
         <h2>Create New Project</h2>
         <input
           type="text"
           placeholder="Project Name"
-          value={newProjectName}
-          onChange={(e) => setNewProjectName(e.target.value)}
+          value={newProject.name}
+          onChange={(e) => setNewProject({ ...newProject, name: e.target.value })}
         />
         <input
           type="number"
-          placeholder="Budget (₹)"
-          value={newProjectBudget}
-          onChange={(e) => setNewProjectBudget(e.target.value)}
+          placeholder="Budget (in ETH)"
+          value={newProject.budget}
+          onChange={(e) => setNewProject({ ...newProject, budget: e.target.value })}
+        />
+        <input
+          type="text"
+          placeholder="Timeline"
+          value={newProject.timeline}
+          onChange={(e) => setNewProject({ ...newProject, timeline: e.target.value })}
         />
         <button onClick={createProject} disabled={loading}>
           {loading ? 'Creating...' : 'Create Project'}
         </button>
-      </div>
+      </section>
 
-      {/* Ongoing Projects List */}
-      <div className={styles.projectsList}>
-        <h2>Ongoing Projects</h2>
+      {/* Projects */}
+      <section className={styles.projectsSection}>
+        <h2>Projects</h2>
         {projects.length > 0 ? (
-          <ul>
-            {projects.map((project, index) => (
-              <li key={index}>
-                <strong>{project.name}</strong> - Budget: ₹{project.budget}, Status: {project.status}
+          <ul className={styles.projectList}>
+            {projects.map((project) => (
+              <li key={project.id} className={styles.projectItem}>
+                <h3>{project.name}</h3>
+                <p>Budget: ₹{Web3.utils.fromWei(project.budget, 'ether')} ETH</p>
+                <p>Status: {project.status}</p>
+                <p>Timeline: {project.timeline}</p>
+                <p>Milestones:</p>
+                <ul>
+                  {project.milestones?.map((milestone) => (
+                    <li key={milestone.id}>
+                      {milestone.name} - Status: {milestone.status}
+                      <button
+                        onClick={() => approveMilestone(project.id, milestone.id)}
+                        disabled={loading}
+                      >
+                        Approve
+                      </button>
+                      <button
+                        onClick={() => rejectMilestone(project.id, milestone.id)}
+                        disabled={loading}
+                      >
+                        Reject
+                      </button>
+                    </li>
+                  ))}
+                </ul>
               </li>
             ))}
           </ul>
         ) : (
           <p>No projects available.</p>
         )}
-      </div>
+      </section>
     </div>
   );
 };

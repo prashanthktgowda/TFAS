@@ -1,9 +1,10 @@
 import React, { useEffect, useState, useRef } from 'react';
 import Web3 from 'web3';
-import contractABI from '/home/prashanthktgowda/academics_project/GFMS/TFAS/frontend/src/abi/contractABI.json'; // Import the ABI
+import contractABI from '../abi/contractABI.json'; // Correct path to ABI
+import styles from '../styles/CitizensPage.module.css';
 
-// Replace with your actual contract address
-const contractAddress = '0x8f09FCEDD8e6A6EC52b7604f8B34bfAC11154727';
+const contractAddress = process.env.REACT_APP_CONTRACT_ADDRESS; // Use the contract address from .env
+const blockchainProvider = process.env.REACT_APP_BLOCKCHAIN_PROVIDER || 'http://127.0.0.1:7545'; // Default to Ganache
 
 const CitizensPage = () => {
   const [notifications, setNotifications] = useState([]);
@@ -13,8 +14,8 @@ const CitizensPage = () => {
   const [showFeedbackModal, setShowFeedbackModal] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const contractInstance = useRef(null); // Use useRef to preserve value
-  const account = useRef(null); // Use useRef to preserve value
+  const contractInstance = useRef(null);
+  const account = useRef(null);
 
   useEffect(() => {
     const initBlockchain = async () => {
@@ -22,11 +23,23 @@ const CitizensPage = () => {
         setLoading(true);
         setError('');
 
+        console.log('Initializing blockchain connection...');
+
+        // Validate environment variables
+        if (!contractAddress) {
+          throw new Error('Contract address is not defined in the environment variables.');
+        }
+        if (!contractABI || !contractABI.abi) {
+          throw new Error('Invalid ABI. Please check the ABI file.');
+        }
+
         // Initialize Web3
-        const web3Instance = new Web3(Web3.givenProvider || 'http://localhost:8545');
+        const web3Instance = new Web3(blockchainProvider);
+        console.log('Web3 instance created:', web3Instance);
 
         // Initialize Contract Instance
-        contractInstance.current = new web3Instance.eth.Contract(contractABI, contractAddress);
+        contractInstance.current = new web3Instance.eth.Contract(contractABI.abi, contractAddress);
+        console.log('Contract instance initialized:', contractInstance.current);
 
         // Get Accounts
         const accounts = await web3Instance.eth.getAccounts();
@@ -34,13 +47,21 @@ const CitizensPage = () => {
           throw new Error('No Ethereum accounts found. Please connect MetaMask or use Ganache.');
         }
         account.current = accounts[0];
+        console.log('Connected account:', account.current);
+
+        // Validate Contract Deployment
+        const code = await web3Instance.eth.getCode(contractAddress);
+        if (code === '0x' || code === '0x0') {
+          throw new Error('No contract deployed at the specified address.');
+        }
+        console.log('Contract deployment validated.');
 
         // Load Data
         await loadProjects(contractInstance.current);
         await loadNotifications(contractInstance.current);
       } catch (err) {
         console.error('Error initializing blockchain:', err);
-        setError('Failed to connect to the blockchain. Please check your network.');
+        setError(err.message || 'Failed to connect to the blockchain.');
       } finally {
         setLoading(false);
       }
@@ -51,7 +72,9 @@ const CitizensPage = () => {
 
   const loadProjects = async (instance) => {
     try {
+      console.log('Fetching projects...');
       const projectsData = await instance.methods.getProjects().call();
+      console.log('Projects fetched:', projectsData);
       setProjects(projectsData);
     } catch (err) {
       console.error('Error fetching projects:', err);
@@ -61,7 +84,9 @@ const CitizensPage = () => {
 
   const loadNotifications = async (instance) => {
     try {
+      console.log('Fetching notifications...');
       const notificationsData = await instance.methods.getNotifications().call();
+      console.log('Notifications fetched:', notificationsData);
       setNotifications(notificationsData);
     } catch (err) {
       console.error('Error fetching notifications:', err);
@@ -84,10 +109,14 @@ const CitizensPage = () => {
       setLoading(true);
       setError('');
 
+      console.log('Submitting feedback for project:', selectedProject.id);
+
       // Call the smart contract's submitFeedback method
       await contractInstance.current.methods
         .submitFeedback(selectedProject.id, feedback)
         .send({ from: account.current });
+
+      console.log('Feedback submitted successfully.');
 
       // Reload projects after feedback submission
       await loadProjects(contractInstance.current);
@@ -104,102 +133,90 @@ const CitizensPage = () => {
   };
 
   return (
-    <div>
+    <div className={styles.container}>
       {/* Header */}
-      <h1>Citizens Page</h1>
-      <p>This page is designed for the general public to view government spending, track project progress, and provide feedback.</p>
+      <header className={styles.header}>
+        <h1>Citizens Page</h1>
+        <p>This page allows citizens to view government spending, track project progress, and provide feedback.</p>
+      </header>
 
       {/* Error Message */}
-      {error && <p style={{ color: 'red' }}>{error}</p>}
+      {error && <p className={styles.errorMessage}>{error}</p>}
 
       {/* Loading Indicator */}
-      {loading && <p>Loading...</p>}
+      {loading && <p className={styles.loading}>Loading...</p>}
 
       {/* Public Dashboard */}
-      <h2>Public Dashboard</h2>
-      <ul>
-        {projects.map((project, index) => (
-          <li
-            key={index}
-            onClick={() => {
-              setSelectedProject(project);
-              setShowFeedbackModal(true);
-            }}
-            style={{ cursor: 'pointer', marginBottom: '10px' }}
-          >
-            {project.name} - Budget: ₹{project.budget}
-          </li>
-        ))}
-      </ul>
+      <section className={styles.dashboardSection}>
+        <h2>Public Dashboard</h2>
+        <ul className={styles.projectList}>
+          {projects.map((project, index) => (
+            <li
+              key={index}
+              onClick={() => {
+                setSelectedProject(project);
+                setShowFeedbackModal(true);
+              }}
+              className={styles.projectItem}
+            >
+              <strong>{project.name}</strong> - Budget: ₹{project.budget}
+            </li>
+          ))}
+        </ul>
+        {projects.length === 0 && <p className={styles.noProjects}>No projects available.</p>}
+      </section>
 
       {/* Feedback Modal */}
       {showFeedbackModal && (
-        <div
-          style={{
-            position: 'fixed',
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%, -50%)',
-            backgroundColor: '#fff',
-            padding: '20px',
-            boxShadow: '0 2px 5px rgba(0, 0, 0, 0.2)',
-            zIndex: 1000,
-          }}
-        >
-          <h3>Feedback for {selectedProject?.name}</h3>
-          <textarea
-            placeholder="Submit your feedback or complaint"
-            value={feedback}
-            onChange={(e) => setFeedback(e.target.value)}
-            style={{
-              width: '100%',
-              padding: '10px',
-              margin: '10px 0',
-              border: '1px solid #ccc',
-              borderRadius: '5px',
-            }}
-          />
-          <button
-            onClick={handleFeedbackSubmit}
-            disabled={loading}
-            style={{
-              background: '#28a745',
-              color: '#fff',
-              border: 'none',
-              padding: '10px 20px',
-              borderRadius: '5px',
-              marginRight: '10px',
-              cursor: 'pointer',
-            }}
-          >
-            {loading ? 'Submitting...' : 'Submit Feedback'}
-          </button>
-          <button
-            onClick={() => setShowFeedbackModal(false)}
-            style={{
-              background: '#ccc',
-              border: 'none',
-              padding: '10px 20px',
-              borderRadius: '5px',
-              cursor: 'pointer',
-            }}
-          >
-            Close
-          </button>
+        <div className={styles.modalOverlay}>
+          <div className={styles.modalContent}>
+            <h3>Feedback for {selectedProject?.name}</h3>
+            <textarea
+              placeholder="Submit your feedback or complaint"
+              value={feedback}
+              onChange={(e) => setFeedback(e.target.value)}
+              className={styles.feedbackInput}
+            />
+            <div className={styles.modalActions}>
+              <button
+                onClick={handleFeedbackSubmit}
+                disabled={loading}
+                className={styles.submitButton}
+              >
+                {loading ? 'Submitting...' : 'Submit Feedback'}
+              </button>
+              <button
+                onClick={() => setShowFeedbackModal(false)}
+                className={styles.closeButton}
+              >
+                Close
+              </button>
+            </div>
+          </div>
         </div>
       )}
 
       {/* Notifications */}
-      <h2>Notifications</h2>
-      <ul>
-        {notifications.map((notification, index) => (
-          <li key={index}>{notification}</li>
-        ))}
-      </ul>
+      <section className={styles.notificationsSection}>
+        <h2>Notifications</h2>
+        <ul className={styles.notificationList}>
+          {notifications.map((notification, index) => (
+            <li key={index} className={styles.notificationItem}>
+              {notification}
+            </li>
+          ))}
+        </ul>
+        {notifications.length === 0 && <p className={styles.noNotifications}>No notifications available.</p>}
+      </section>
 
       {/* Educational Resources */}
-      <h2>Educational Resources</h2>
-      <p>Learn how blockchain ensures transparency and accountability.</p>
+      <section className={styles.resourcesSection}>
+        <h2>Educational Resources</h2>
+        <p>Learn how blockchain ensures transparency and accountability.</p>
+        <a href="https://example.com/blockchain-resources" target="_blank" rel="noopener noreferrer">
+          Learn More
+        </a>
+      </section>
     </div>
   );
 };

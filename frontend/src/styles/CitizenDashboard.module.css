@@ -1,0 +1,22 @@
+.dashboardContainer {
+  padding: 20px;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.projectsSection,
+.notificationsSection,
+.educationalResourcesSection {
+  margin-bottom: 20px;
+}
+
+.error {
+  color: red;
+}
+
+.loading {
+  color: blue;
+}

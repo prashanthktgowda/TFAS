@@ -20,9 +20,6 @@
   background-color: #003366;
   color: white;
   padding: 1rem 0;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
 }
 
 .header .logo {
@@ -40,9 +37,9 @@
 }
 
 .nav a {
+  color: white;
   text-decoration: none;
   font-weight: bold;
-  transition: color 0.3s ease;
 }
 
 .nav a:hover {

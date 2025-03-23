@@ -1,0 +1,209 @@
+/* Global Styles */
+.container {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: #f9f9f9;
+    color: #333;
+  }
+  
+  /* Header Styles */
+  .header {
+    background-color: #003366;
+    color: white;
+    text-align: center;
+    padding: 1rem 0;
+  }
+  
+  .header h1 {
+    margin: 0;
+    font-size: 1.5rem;
+  }
+  
+  .header p {
+    margin-top: 0.5rem;
+    font-size: 0.9rem;
+  }
+  
+  /* Error Message Styles */
+  .errorMessage {
+    color: red;
+    text-align: center;
+    margin-top: 1rem;
+  }
+  
+  /* Loading Indicator Styles */
+  .loading {
+    text-align: center;
+    margin-top: 1rem;
+    font-style: italic;
+    color: #666;
+  }
+  
+  /* Public Dashboard Styles */
+  .dashboardSection {
+    margin: 2rem auto;
+    max-width: 600px;
+    padding: 1rem;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .dashboardSection h2 {
+    text-align: center;
+    margin-bottom: 1rem;
+    color: #003366;
+  }
+  
+  .projectList {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .projectItem {
+    padding: 0.75rem;
+    margin-bottom: 0.5rem;
+    background-color: #f0f8ff;
+    border-radius: 4px;
+    border-left: 4px solid #007bff;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .projectItem:hover {
+    background-color: #e0f3ff;
+  }
+  
+  .noProjects {
+    text-align: center;
+    font-style: italic;
+    color: #666;
+  }
+  
+  /* Feedback Modal Styles */
+  .modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+  
+  .modalContent {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 500px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .modalContent h3 {
+    margin-top: 0;
+    color: #003366;
+  }
+  
+  .feedbackInput {
+    width: 100%;
+    padding: 0.75rem;
+    margin: 1rem 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    resize: vertical;
+    min-height: 100px;
+  }
+  
+  .modalActions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 1rem;
+  }
+  
+  .submitButton {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 0.75rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .submitButton:hover {
+    background-color: #218838;
+  }
+  
+  .submitButton:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+  
+  .closeButton {
+    background-color: #ccc;
+    border: none;
+    padding: 0.75rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .closeButton:hover {
+    background-color: #bbb;
+  }
+  
+  /* Notifications Section Styles */
+  .notificationsSection {
+    margin: 2rem auto;
+    max-width: 600px;
+    padding: 1rem;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .notificationsSection h2 {
+    text-align: center;
+    margin-bottom: 1rem;
+    color: #003366;
+  }
+  
+  .notificationList {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .notificationItem {
+    padding: 0.75rem;
+    margin-bottom: 0.5rem;
+    background-color: #f0f8ff;
+    border-radius: 4px;
+    border-left: 4px solid #007bff;
+  }
+  
+  .noNotifications {
+    text-align: center;
+    font-style: italic;
+    color: #666;
+  }
+  
+  /* Educational Resources Section Styles */
+  .resourcesSection {
+    margin: 2rem auto;
+    max-width: 600px;
+    padding: 1rem;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+  }
+  
+  

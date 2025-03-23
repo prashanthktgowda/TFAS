@@ -1,114 +1,234 @@
 import React, { useState, useEffect } from 'react';
 import Web3 from 'web3';
-import contractABI from '../abi/contractABI.json'; // Ensure this path is correct
-import styles from '../styles/ContractorDashboard.module.css'; // Ensure this path is correct
+import contractABI from '../abi/contractABI.json'; // Correct path to ABI
+import styles from '../styles/ContractorDashboard.module.css';
+
+const contractAddress = process.env.REACT_APP_CONTRACT_ADDRESS; // Use the contract address from .env
+const blockchainProvider = process.env.REACT_APP_BLOCKCHAIN_PROVIDER || 'http://127.0.0.1:7545'; // Default to Ganache
 
 const ContractorDashboard = () => {
-  // State Variables
-  const [tasks, setTasks] = useState([]); // List of tasks
-  const [contractInstance, setContractInstance] = useState(null); // Smart contract instance
-  const [account, setAccount] = useState(''); // Connected Ethereum account
-  const [loading, setLoading] = useState(false); // Loading state for async operations
-  const [error, setError] = useState(''); // Error state for error handling
+  const [projects, setProjects] = useState([]);
+  const [milestoneProof, setMilestoneProof] = useState(null); // Used for file upload
+  const [selectedProject, setSelectedProject] = useState(null); // Used for project selection
+  const [account, setAccount] = useState('');
+  const [contractInstance, setContractInstance] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [clarification, setClarification] = useState('');
+  const [invoiceDetails, setInvoiceDetails] = useState({ milestoneId: '', amount: '' });
+  const [funds, setFunds] = useState({ received: 0, pending: 0 });
 
-  // Initialize Blockchain Connection
-  useEffect(() => {
-    const initBlockchain = async () => {
-      try {
-        setLoading(true);
-        setError('');
-
-        // Initialize Web3
-        const web3 = new Web3(Web3.givenProvider || 'http://127.0.0.1:7545'); // Ganache RPC URL
-
-        // Get Accounts
-        const accounts = await web3.eth.getAccounts();
-        if (accounts.length === 0) {
-          throw new Error('No Ethereum accounts found. Please connect MetaMask or use Ganache.');
-        }
-        setAccount(accounts[0]);
-
-        // Initialize Contract Instance
-        const instance = new web3.eth.Contract(
-          contractABI,
-          '0x819EAfa7f98Ee03e9F9ECD4d7f0a33A8DD937815' // Replace with your deployed contract address
-        );
-        setContractInstance(instance);
-
-        // Load Tasks
-        await loadTasks(instance);
-      } catch (err) {
-        console.error('Error initializing blockchain:', err);
-        setError('Failed to connect to the blockchain. Please check your network.');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    initBlockchain();
-  }, []);
-
-  // Load Tasks from Smart Contract
-  const loadTasks = async (instance) => {
-    try {
-      const tasksData = await instance.methods.getTasks().call();
-      setTasks(tasksData);
-    } catch (err) {
-      console.error('Error fetching tasks:', err);
-      setError('Failed to fetch tasks from the blockchain.');
-    }
-  };
-
-  // Submit Milestone
-  const submitMilestone = async (taskId) => {
+  const initBlockchain = async () => {
     try {
       setLoading(true);
       setError('');
 
-      // Call the smart contract's submitMilestone method
-      await contractInstance.methods
-        .submitMilestone(taskId)
-        .send({ from: account });
+      console.log('Initializing blockchain connection...');
 
-      // Reload tasks after submission
-      await loadTasks(contractInstance);
+      // Validate environment variables
+      if (!contractAddress) {
+        throw new Error('Contract address is not defined in the environment variables.');
+      }
+      if (!contractABI || !contractABI.abi) {
+        throw new Error('Invalid ABI. Please check the ABI file.');
+      }
+
+      // Initialize Web3
+      const web3Instance = new Web3(blockchainProvider);
+      console.log('Web3 instance created:', web3Instance);
+
+      // Initialize Contract Instance
+      const instance = new web3Instance.eth.Contract(contractABI.abi, contractAddress);
+      setContractInstance(instance);
+      console.log('Contract instance initialized:', instance);
+
+      // Get Accounts
+      const accounts = await web3Instance.eth.getAccounts();
+      if (accounts.length === 0) {
+        throw new Error('No Ethereum accounts found. Please connect MetaMask or use Ganache.');
+      }
+      setAccount(accounts[0]);
+      console.log('Connected account:', accounts[0]);
+
+      // Load Projects
+      const projectsData = await instance.methods.getProjects().call();
+      console.log('Projects fetched:', projectsData);
+      setProjects(projectsData);
+
+      // Load Fund Details
+      const receivedFunds = await instance.methods.getReceivedFunds(accounts[0]).call();
+      const pendingFunds = await instance.methods.getPendingFunds(accounts[0]).call();
+      setFunds({ received: Web3.utils.fromWei(receivedFunds, 'ether'), pending: Web3.utils.fromWei(pendingFunds, 'ether') });
+    } catch (err) {
+      console.error('Error initializing blockchain:', err);
+      setError(err.message || 'Failed to connect to the blockchain.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    initBlockchain();
+  }, []);
+
+  const handleFileUpload = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      setMilestoneProof(file);
+      console.log('Milestone proof file selected:', file.name);
+    }
+  };
+
+  const handleProjectSelection = (project) => {
+    setSelectedProject(project);
+    console.log('Selected project:', project.name);
+  };
+
+  const submitMilestone = async (projectId, milestoneId) => {
+    if (!milestoneProof) {
+      setError('Please upload proof of milestone completion.');
+      return;
+    }
+    try {
+      setLoading(true);
+      setError('');
+      await contractInstance.methods
+        .submitMilestone(projectId, milestoneId, milestoneProof.name) // Use file name as proof
+        .send({ from: account });
+      alert('Milestone submitted successfully.');
     } catch (err) {
       console.error('Error submitting milestone:', err);
-      setError('Failed to submit the milestone. Please try again.');
+      setError('Failed to submit milestone.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const requestClarification = async (projectId) => {
+    if (!clarification.trim()) {
+      setError('Clarification message cannot be empty.');
+      return;
+    }
+    try {
+      setLoading(true);
+      setError('');
+      await contractInstance.methods
+        .requestClarification(projectId, clarification)
+        .send({ from: account });
+      alert('Clarification request sent successfully.');
+    } catch (err) {
+      console.error('Error requesting clarification:', err);
+      setError('Failed to send clarification request.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const generateInvoice = async (projectId, milestoneId, amount) => {
+    if (!amount || !milestoneId) {
+      setError('Please provide valid invoice details.');
+      return;
+    }
+    try {
+      setLoading(true);
+      setError('');
+      console.log(`Generating invoice for Project ID: ${projectId}, Milestone ID: ${milestoneId}, Amount: ${amount}`);
+      await contractInstance.methods
+        .generateInvoice(projectId, milestoneId, Web3.utils.toWei(amount, 'ether'))
+        .send({ from: account });
+      alert('Invoice generated successfully.');
+    } catch (err) {
+      console.error('Error generating invoice:', err);
+      setError('Failed to generate invoice.');
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className={styles.contractorContainer}>
-      {/* Header */}
-      <h1>Contractor Dashboard</h1>
+    <div className={styles.dashboardContainer}>
+      <header className={styles.header}>
+        <h1>Contractor Dashboard</h1>
+        <p>Manage your projects, milestones, and invoices efficiently.</p>
+      </header>
 
-      {/* Error Message */}
-      {error && <p className={styles.errorMessage}>{error}</p>}
+      {error && <p className={styles.error}>{error}</p>}
+      {loading && <p className={styles.loading}>Loading...</p>}
 
-      {/* Loading Indicator */}
-      {loading && <p>Loading...</p>}
+      <section className={styles.fundsSection}>
+        <h2>Fund Disbursement</h2>
+        <p>Received Funds: ₹{funds.received} ETH</p>
+        <p>Pending Funds: ₹{funds.pending} ETH</p>
+      </section>
 
-      {/* Tasks List */}
-      <div className={styles.tasksList}>
-        <h2>Tasks</h2>
-        {tasks.length > 0 ? (
-          <ul>
-            {tasks.map((task, index) => (
-              <li key={index}>
-                <strong>{task.projectName}</strong> - Milestone: {task.milestone}, Status: {task.status}
-                <button onClick={() => submitMilestone(task.id)} disabled={loading}>
-                  {loading ? 'Submitting...' : 'Submit Milestone'}
+      <section className={styles.projectsSection}>
+        <h2>Projects</h2>
+        {projects.length > 0 ? (
+          <ul className={styles.projectList}>
+            {projects.map((project) => (
+              <li key={project.id} className={styles.projectItem}>
+                <h3>{project.name}</h3>
+                <p>Budget: ₹{Web3.utils.fromWei(project.budget, 'ether')} ETH</p>
+                <p>Timeline: {project.timeline}</p>
+                <button onClick={() => handleProjectSelection(project)}>Select Project</button>
+                <p>Milestones:</p>
+                <ul>
+                  {project.milestones?.map((milestone) => (
+                    <li key={milestone.id}>
+                      {milestone.name} - Status: {milestone.status}
+                      <input type="file" onChange={handleFileUpload} />
+                      <button
+                        onClick={() => submitMilestone(project.id, milestone.id)}
+                        disabled={loading}
+                      >
+                        Submit Milestone
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+                <textarea
+                  placeholder="Request clarification"
+                  value={clarification}
+                  onChange={(e) => setClarification(e.target.value)}
+                />
+                <button onClick={() => requestClarification(project.id)} disabled={loading}>
+                  Request Clarification
                 </button>
               </li>
             ))}
           </ul>
         ) : (
-          <p>No tasks available.</p>
+          <p>No projects available.</p>
         )}
-      </div>
+      </section>
+
+      <section className={styles.invoiceSection}>
+        <h2>Generate Invoice</h2>
+        <input
+          type="text"
+          placeholder="Milestone ID"
+          value={invoiceDetails.milestoneId}
+          onChange={(e) =>
+            setInvoiceDetails({ ...invoiceDetails, milestoneId: e.target.value })
+          }
+        />
+        <input
+          type="number"
+          placeholder="Amount"
+          value={invoiceDetails.amount}
+          onChange={(e) =>
+            setInvoiceDetails({ ...invoiceDetails, amount: e.target.value })
+          }
+        />
+        <button
+          onClick={() =>
+            generateInvoice(selectedProject?.id, invoiceDetails.milestoneId, invoiceDetails.amount)
+          }
+          disabled={loading}
+        >
+          Generate Invoice
+        </button>
+      </section>
     </div>
   );
 };

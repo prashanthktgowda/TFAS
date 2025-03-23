@@ -7,6 +7,10 @@
     margin: 0 auto;
   }
   
+  .dashboardContainer {
+    padding: 20px;
+  }
+  
   /* Header Styling */
   h1 {
     text-align: center;
@@ -15,11 +19,24 @@
     color: #007bff; /* Blue color for emphasis */
   }
   
+  .header {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
   /* Error Message Styling */
   .errorMessage {
     color: red;
     font-size: 1rem;
     margin-bottom: 10px;
+  }
+  
+  .error {
+    color: red;
+  }
+  
+  .loading {
+    color: blue;
   }
   
   /* Audits List Styling */
@@ -61,6 +78,11 @@
   .auditList li span {
     color: #555;
     font-size: 0.9rem;
+  }
+  
+  .projectsSection,
+  .auditReportsSection {
+    margin-bottom: 20px;
   }
   
   /* Buttons Styling */

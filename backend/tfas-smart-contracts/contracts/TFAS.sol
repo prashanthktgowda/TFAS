@@ -7,6 +7,7 @@ contract TFAS {
     event ProjectStatusUpdated(uint indexed projectId, string newStatus);
     event FeedbackSubmitted(uint indexed projectId, string feedback);
     event InvoiceGenerated(uint indexed projectId, uint milestoneId, uint amount, address contractor);
+    event ClarificationRequested(uint indexed projectId, string message, address requester);
     
     // Struct to represent a Project
     struct Project {
@@ -31,6 +32,9 @@ contract TFAS {
     // Mapping from project ID to owner address
     mapping(uint => address) public projectOwners;
 
+    // Mapping to track received funds for contractors
+    mapping(address => uint) public receivedFunds;
+
     /**
      * @dev Constructor to initialize the contract.
      */
@@ -49,7 +53,10 @@ contract TFAS {
         uint _budget,
         string memory _timeline
     ) public {
+        require(bytes(_name).length > 0, "Project name cannot be empty");
         require(_budget > 0, "Budget must be greater than zero");
+        require(bytes(_timeline).length > 0, "Timeline cannot be empty");
+
         projectId++;
         projects.push(Project(projectId, _name, _budget, "In Progress", new string[](0), _timeline, msg.sender));
         projectOwners[projectId] = msg.sender;
@@ -81,8 +88,9 @@ contract TFAS {
      */
     function submitFeedback(uint _projectId, string memory _feedback) public {
         require(_projectId > 0 && _projectId <= projectId, "Invalid project ID");
+        require(bytes(_feedback).length > 0, "Feedback cannot be empty");
+
         projects[_projectId - 1].feedbacks.push(_feedback);
-        addNotification(string(abi.encodePacked("Feedback received for project ID ", uint2str(_projectId))));
         emit FeedbackSubmitted(_projectId, _feedback);
     }
 
@@ -118,11 +126,10 @@ contract TFAS {
     }
 
     /**
-     * @dev Function to retrieve all notifications.
-     * @return An array of all notifications.
+     * @dev Returns all notifications.
      */
     function getNotifications() public view returns (string[] memory) {
-        return notifications;
+        return notifications; // Ensure this does not revert
     }
 
     /**
@@ -151,6 +158,28 @@ contract TFAS {
 
         // Emit the invoice generation event
         emit InvoiceGenerated(_projectId, _milestoneId, _amount, msg.sender);
+    }
+
+    /**
+     * @dev Function to get the received funds for a contractor.
+     * @param contractor The address of the contractor.
+     * @return The amount of funds received by the contractor.
+     */
+    function getReceivedFunds(address contractor) public view returns (uint) {
+        require(contractor != address(0), "Invalid contractor address");
+        return receivedFunds[contractor];
+    }
+
+    /**
+     * @dev Function to request clarification for a project.
+     * @param _projectId The ID of the project.
+     * @param _message The clarification message.
+     */
+    function requestClarification(uint _projectId, string memory _message) public {
+        require(_projectId > 0 && _projectId <= projectId, "Invalid project ID");
+        require(bytes(_message).length > 0, "Message cannot be empty");
+
+        emit ClarificationRequested(_projectId, _message, msg.sender);
     }
 
     /**

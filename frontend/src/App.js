@@ -22,63 +22,68 @@ function App() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
-  useEffect(() => {
-    const initBlockchain = async () => {
-      try {
-        setLoading(true);
-        setError('');
+  const initBlockchain = async () => {
+    try {
+      setLoading(true);
+      setError('');
 
-        // Validate environment variables
-        const blockchainProvider = process.env.REACT_APP_BLOCKCHAIN_PROVIDER || 'http://127.0.0.1:7545';
-        const contractAddress = process.env.REACT_APP_CONTRACT_ADDRESS;
-        if (!blockchainProvider) {
-          throw new Error('REACT_APP_BLOCKCHAIN_PROVIDER is not defined.');
-        }
-        if (!contractAddress) {
-          throw new Error('REACT_APP_CONTRACT_ADDRESS is not defined.');
-        }
-
-        // Initialize Web3
-        const web3Instance = new Web3(blockchainProvider);
-        setWeb3(web3Instance);
-
-        // Get Accounts
-        const accounts = await web3Instance.eth.getAccounts();
-        if (accounts.length === 0) {
-          throw new Error('No Ethereum accounts found. Please check Ganache or MetaMask.');
-        }
-        setAccount(accounts[0]);
-
-        // Initialize Contract Instance
-        const instance = new web3Instance.eth.Contract(contractABI.abi, contractAddress);
-        setContractInstance(instance);
-
-        // Validate Contract Instance
-        try {
-          const totalFunds = await instance.methods.totalFunds().call();
-          console.log('Blockchain connection validated. Total funds:', totalFunds);
-        } catch (error) {
-          console.error('Error calling totalFunds:', error);
-          throw new Error('Error happened while trying to execute a function inside a smart contract');
-        }
-      } catch (err) {
-        console.error('Error initializing blockchain:', err.message);
-        setError(err.message);
-      } finally {
-        setLoading(false);
+      // Validate environment variables
+      const blockchainProvider = process.env.REACT_APP_BLOCKCHAIN_PROVIDER || 'http://127.0.0.1:7545';
+      const contractAddress = process.env.REACT_APP_CONTRACT_ADDRESS;
+      if (!blockchainProvider || !contractAddress) {
+        throw new Error('Blockchain provider or contract address is not defined.');
       }
-    };
 
+      // Initialize Web3
+      const web3Instance = new Web3(blockchainProvider);
+      setWeb3(web3Instance);
+
+      // Get Accounts
+      const accounts = await web3Instance.eth.getAccounts();
+      if (accounts.length === 0) {
+        throw new Error('No Ethereum accounts found. Please check Ganache or MetaMask.');
+      }
+      setAccount(accounts[0]);
+
+      // Initialize Contract Instance
+      const instance = new web3Instance.eth.Contract(contractABI.abi, contractAddress);
+      setContractInstance(instance);
+
+      // Validate Contract Instance
+      try {
+        const totalFunds = await instance.methods.totalFunds().call();
+        if (totalFunds === '0') {
+          setError('No projects available to calculate total funds.');
+        } else {
+          console.log('Blockchain connection validated. Total funds:', totalFunds);
+        }
+      } catch (error) {
+        console.error('Error calling totalFunds:', error);
+        setError('Failed to fetch total funds.');
+      }
+    } catch (err) {
+      console.error('Error initializing blockchain:', err.message);
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
     initBlockchain();
   }, []);
 
   const fetchNotifications = async () => {
     try {
       const response = await fetch(`${API_BASE_URL}/notifications`);
+      if (!response.ok) {
+        throw new Error('Failed to fetch notifications');
+      }
       const data = await response.json();
       console.log('Notifications:', data);
     } catch (error) {
       console.error('Error fetching notifications:', error);
+      setError('Failed to fetch notifications. Please ensure the backend is running.');
     }
   };
 

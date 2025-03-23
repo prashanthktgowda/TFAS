@@ -1,23 +1,43 @@
 import { ethers } from 'ethers';
-import ContractHelper from '../../../backend/tfas-smart-contracts/utils/contractHelper'; // Correct path
+import TFASABI from '../abi/contractABI.json';
+import FundAllocationABI from '../abi/FundAllocationABI.json';
 
-class TFASService {
+class ContractService {
   constructor() {
-    this.initializeContract();
+    this.initializeContracts();
   }
 
-  async initializeContract() {
+  async initializeContracts() {
     if (window.ethereum) {
       const provider = new ethers.providers.Web3Provider(window.ethereum);
-      this.contractHelper = new ContractHelper(provider);
+      this.tfasContract = new ethers.Contract(
+        process.env.REACT_APP_CONTRACT_ADDRESS, // Updated TFAS address
+        TFASABI.abi,
+        provider
+      );
+      this.fundAllocationContract = new ethers.Contract(
+        process.env.REACT_APP_FUND_ALLOCATION_ADDRESS, // Updated FundAllocation address
+        FundAllocationABI.abi,
+        provider
+      );
       await window.ethereum.request({ method: 'eth_requestAccounts' });
     }
   }
 
+  async getTotalFunds() {
+    return await this.fundAllocationContract.totalFunds();
+  }
+
+  async allocateFunds(amount) {
+    const signer = this.fundAllocationContract.provider.getSigner();
+    const tx = await this.fundAllocationContract.connect(signer).allocateFunds(amount);
+    await tx.wait();
+  }
+
   async createProject(name, budget, timeline) {
     try {
-      const signer = this.contractHelper.provider.getSigner();
-      const tx = await this.contractHelper.createProject(name, budget, timeline, signer);
+      const signer = this.tfasContract.provider.getSigner();
+      const tx = await this.tfasContract.createProject(name, budget, timeline, signer);
       await tx.wait();
       return true;
     } catch (error) {
@@ -28,7 +48,7 @@ class TFASService {
 
   async getProjects() {
     try {
-      const projects = await this.contractHelper.getProjects();
+      const projects = await this.tfasContract.getProjects();
       return projects.map(project => ({
         id: project.id.toString(),
         name: project.name,
@@ -45,8 +65,8 @@ class TFASService {
 
   async submitFeedback(projectId, feedback) {
     try {
-      const signer = this.contractHelper.provider.getSigner();
-      const tx = await this.contractHelper.contract.connect(signer).submitFeedback(projectId, feedback);
+      const signer = this.tfasContract.provider.getSigner();
+      const tx = await this.tfasContract.connect(signer).submitFeedback(projectId, feedback);
       await tx.wait();
       return true;
     } catch (error) {
@@ -56,4 +76,4 @@ class TFASService {
   }
 }
 
-export default new TFASService();
+export default new ContractService();

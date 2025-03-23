@@ -3,7 +3,8 @@ import Web3 from 'web3';
 import contractABI from '../abi/contractABI.json'; // Correct path to ABI
 import styles from '../styles/CitizenDashboard.module.css';
 
-const contractAddress = process.env.REACT_APP_CONTRACT_ADDRESS; // Use the contract address from .env
+const contractAddress = process.env.REACT_APP_CONTRACT_ADDRESS; // TFAS contract address
+const fundAllocationAddress = process.env.REACT_APP_FUND_ALLOCATION_ADDRESS; // FundAllocation contract address
 const blockchainProvider = process.env.REACT_APP_BLOCKCHAIN_PROVIDER || 'http://127.0.0.1:7545'; // Default to Ganache
 
 const CitizenDashboard = () => {

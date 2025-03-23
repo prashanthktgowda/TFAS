@@ -3,7 +3,7 @@ import Web3 from 'web3';
 import contractABI from '../abi/contractABI.json'; // Correct path to ABI
 import styles from '../styles/CitizensPage.module.css';
 
-const contractAddress = process.env.REACT_APP_CONTRACT_ADDRESS; // Use the contract address from .env
+const contractAddress = process.env.REACT_APP_CONTRACT_ADDRESS; // Use address from .env
 const blockchainProvider = process.env.REACT_APP_BLOCKCHAIN_PROVIDER || 'http://127.0.0.1:7545'; // Default to Ganache
 
 const CitizensPage = () => {
@@ -111,10 +111,10 @@ const CitizensPage = () => {
 
       console.log('Submitting feedback for project:', selectedProject.id);
 
-      // Call the smart contract's submitFeedback method
+      // Call the smart contract's submitFeedback method with a higher gas limit
       await contractInstance.current.methods
         .submitFeedback(selectedProject.id, feedback)
-        .send({ from: account.current });
+        .send({ from: account.current, gas: 300000 }); // Increased gas limit
 
       console.log('Feedback submitted successfully.');
 

@@ -2,8 +2,8 @@
   "_format": "hh-sol-cache-2",
   "files": {
     "/home/prashanthktgowda/academics_project/GFMS/TFAS/backend/tfas-smart-contracts/contracts/TFAS.sol": {
-      "lastModificationDate": 1742712055456,
-      "contentHash": "5060e2289592157832ecd29e62295576",
+      "lastModificationDate": 1742725038555,
+      "contentHash": "e4a5acc24855cbf1ada3442f2c208525",
       "sourceName": "contracts/TFAS.sol",
       "solcConfig": {
         "version": "0.8.19",
@@ -34,6 +34,41 @@
       ],
       "artifacts": [
         "TFAS"
+      ]
+    },
+    "/home/prashanthktgowda/academics_project/GFMS/TFAS/backend/tfas-smart-contracts/contracts/FundAllocation.sol": {
+      "lastModificationDate": 1742724192352,
+      "contentHash": "763047c3b77e55574ce52c6a09e8bbc4",
+      "sourceName": "contracts/FundAllocation.sol",
+      "solcConfig": {
+        "version": "0.8.19",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "FundAllocation"
       ]
     }
   }

@@ -1,5 +1,6 @@
 {
-  "address": "0x81Fa56F8A0462d7946Db4Ed4c0654d7756DCFE9d",
+  "tfasAddress": "0xa0EBb14f01eb9778b5A0bf90A41FD985D12beA2d",
+  "fundAllocationAddress": "0xa0EBb14f01eb9778b5A0bf90A41FD985D12beA2d",
   "network": "ganache",
   "deployer": "0x9B20Eb3374312715e9D47650d4DfEC0082f667Be",
   "chainId": 1337

@@ -9,7 +9,6 @@ const blockchainProvider = process.env.REACT_APP_BLOCKCHAIN_PROVIDER || 'http://
 const GovernmentOfficialDashboard = () => {
   const [projects, setProjects] = useState([]);
   const [newProject, setNewProject] = useState({ name: '', budget: '', timeline: '' });
-  const [milestoneRequests, setMilestoneRequests] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const contractInstance = useRef(null);

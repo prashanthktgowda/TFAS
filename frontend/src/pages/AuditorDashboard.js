@@ -7,9 +7,9 @@ const contractAddress = process.env.REACT_APP_CONTRACT_ADDRESS; // Use the contr
 const blockchainProvider = process.env.REACT_APP_BLOCKCHAIN_PROVIDER || 'http://127.0.0.1:7545'; // Default to Ganache
 
 const AuditorDashboard = () => {
-  const [projects, setProjects] = useState([]);
-  const [redFlagMessage, setRedFlagMessage] = useState(''); // Fixed undefined variable
-  const [auditReports, setAuditReports] = useState([]); // Added state for audit reports
+  const [projects, setProjects] = useState([]); // Ensure projects is initialized as an empty array
+  const [redFlagMessage, setRedFlagMessage] = useState('');
+  const [auditReports, setAuditReports] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const contractInstance = useRef(null);
@@ -50,7 +50,7 @@ const AuditorDashboard = () => {
         // Load Projects
         const projectsData = await contractInstance.current.methods.getProjects().call();
         console.log('Projects fetched:', projectsData);
-        setProjects(projectsData);
+        setProjects(projectsData || []); // Ensure projectsData is an array
       } catch (err) {
         console.error('Error initializing blockchain:', err);
         setError(err.message || 'Failed to connect to the blockchain.');
@@ -78,7 +78,7 @@ const AuditorDashboard = () => {
         alert('Milestone rejected successfully.');
       }
       const updatedProjects = await contractInstance.current.methods.getProjects().call();
-      setProjects(updatedProjects);
+      setProjects(updatedProjects || []); // Ensure updatedProjects is an array
     } catch (err) {
       console.error('Error verifying milestone:', err);
       setError('Failed to verify milestone.');
@@ -114,7 +114,7 @@ const AuditorDashboard = () => {
       setLoading(true);
       setError('');
       const reports = await contractInstance.current.methods.generateAuditReports().call();
-      setAuditReports(reports);
+      setAuditReports(reports || []); // Ensure reports is an array
     } catch (err) {
       console.error('Error generating audit report:', err);
       setError('Failed to generate audit report.');
@@ -144,7 +144,7 @@ const AuditorDashboard = () => {
                 <p>Timeline: {project.timeline}</p>
                 <p>Milestones:</p>
                 <ul>
-                  {project.milestones.map((milestone) => (
+                  {project.milestones?.map((milestone) => (
                     <li key={milestone.id}>
                       {milestone.name} - Status: {milestone.status}
                       <button

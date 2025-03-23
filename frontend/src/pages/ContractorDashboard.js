@@ -3,7 +3,7 @@ import Web3 from 'web3';
 import contractABI from '../abi/contractABI.json'; // Correct path to ABI
 import styles from '../styles/ContractorDashboard.module.css';
 
-const contractAddress = process.env.REACT_APP_CONTRACT_ADDRESS; // Use the contract address from .env
+const contractAddress = process.env.REACT_APP_CONTRACT_ADDRESS; // Updated TFAS contract address
 const blockchainProvider = process.env.REACT_APP_BLOCKCHAIN_PROVIDER || 'http://127.0.0.1:7545'; // Default to Ganache
 
 const ContractorDashboard = () => {
@@ -25,7 +25,6 @@ const ContractorDashboard = () => {
 
       console.log('Initializing blockchain connection...');
 
-      // Validate environment variables
       if (!contractAddress) {
         throw new Error('Contract address is not defined in the environment variables.');
       }
@@ -33,16 +32,13 @@ const ContractorDashboard = () => {
         throw new Error('Invalid ABI. Please check the ABI file.');
       }
 
-      // Initialize Web3
       const web3Instance = new Web3(blockchainProvider);
       console.log('Web3 instance created:', web3Instance);
 
-      // Initialize Contract Instance
       const instance = new web3Instance.eth.Contract(contractABI.abi, contractAddress);
       setContractInstance(instance);
       console.log('Contract instance initialized:', instance);
 
-      // Get Accounts
       const accounts = await web3Instance.eth.getAccounts();
       if (accounts.length === 0) {
         throw new Error('No Ethereum accounts found. Please connect MetaMask or use Ganache.');
@@ -50,15 +46,28 @@ const ContractorDashboard = () => {
       setAccount(accounts[0]);
       console.log('Connected account:', accounts[0]);
 
-      // Load Projects
-      const projectsData = await instance.methods.getProjects().call();
-      console.log('Projects fetched:', projectsData);
-      setProjects(projectsData);
+      try {
+        const projectsData = await instance.methods.getProjects().call();
+        console.log('Projects fetched:', projectsData);
+        setProjects(projectsData);
+      } catch (err) {
+        console.error('Error fetching projects:', err);
+        throw new Error('Failed to fetch projects from the blockchain.');
+      }
 
-      // Load Fund Details
-      const receivedFunds = await instance.methods.getReceivedFunds(accounts[0]).call();
-      const pendingFunds = await instance.methods.getPendingFunds(accounts[0]).call();
-      setFunds({ received: Web3.utils.fromWei(receivedFunds, 'ether'), pending: Web3.utils.fromWei(pendingFunds, 'ether') });
+      try {
+        if (instance.methods.getReceivedFunds) {
+          console.log('Fetching received funds for account:', accounts[0]);
+          const receivedFunds = await instance.methods.getReceivedFunds(accounts[0]).call();
+          console.log('Received funds:', receivedFunds);
+          setFunds((prevFunds) => ({ ...prevFunds, received: Web3.utils.fromWei(receivedFunds, 'ether') }));
+        } else {
+          console.warn('getReceivedFunds method is not available in the contract.');
+        }
+      } catch (err) {
+        console.error('Error fetching received funds:', err);
+        setError('Failed to fetch received funds. Please ensure the contract is deployed correctly.');
+      }
     } catch (err) {
       console.error('Error initializing blockchain:', err);
       setError(err.message || 'Failed to connect to the blockchain.');
@@ -109,13 +118,16 @@ const ContractorDashboard = () => {
       setError('Clarification message cannot be empty.');
       return;
     }
+
     try {
       setLoading(true);
       setError('');
+      console.log(`Requesting clarification for project ID: ${projectId}`);
       await contractInstance.methods
         .requestClarification(projectId, clarification)
         .send({ from: account });
       alert('Clarification request sent successfully.');
+      setClarification('');
     } catch (err) {
       console.error('Error requesting clarification:', err);
       setError('Failed to send clarification request.');

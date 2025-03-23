@@ -5,17 +5,22 @@ async function main() {
   console.log("Deploying to Ganache network...");
   
   const [deployer] = await hre.ethers.getSigners();
-  console.log("Deploying contracts with account:", "0x9B20Eb3374312715e9D47650d4DfEC0082f667Be");
+  console.log("Deploying contracts with account:", deployer.address);
 
   const TFAS = await hre.ethers.getContractFactory("TFAS");
   const tfas = await TFAS.deploy();
   await tfas.deployed();
+  console.log("TFAS deployed to:", tfas.address);
 
-  console.log("TFAS deployed to:", "0x81Fa56F8A0462d7946Db4Ed4c0654d7756DCFE9d");
+  const FundAllocation = await hre.ethers.getContractFactory("FundAllocation");
+  const fundAllocation = await FundAllocation.deploy();
+  await fundAllocation.deployed();
+  console.log("FundAllocation deployed to:", fundAllocation.address);
 
-  // Save contract address with network info
+  // Save contract addresses
   const contractData = {
-    address: tfas.address,
+    tfasAddress: "0xCacD7F9Ee234dEe14EaF64fe1C6118CC63C2bFD1", // Updated TFAS address
+    fundAllocationAddress: "0x85eBD36FA7C8B079EF609A27b7Afb858AD979E9d", // Updated FundAllocation address
     network: "ganache",
     deployer: deployer.address,
     chainId: 1337

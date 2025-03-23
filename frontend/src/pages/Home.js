@@ -1,16 +1,21 @@
 import React from 'react';
+import './Home.css'; // Import the new CSS file for styling
 
 const Home = () => {
   return (
     <div className="home-container">
       {/* Hero Section */}
       <section className="hero">
-        <h2>Revolutionizing Public Fund Management with Blockchain Technology</h2>
-        <p>TFAS ensures transparency, accountability, and efficiency in managing government funds for public development projects.</p>
-        <div className="cta-buttons">
-          <button onClick={() => window.location.href = '#key-objectives'}>Learn More</button>
-          <button onClick={() => window.location.href = '#workflow'}>View Workflow</button>
-          <button onClick={() => window.location.href = '/citizens'}>Explore Projects</button>
+        <div className="hero-content">
+          <h1>All things public fund management, right here.</h1>
+          <p>Built for a transparent and efficient India.</p>
+          <div className="cta-buttons">
+            <button onClick={() => window.location.href = '/signup'}>Get Started</button>
+            <button onClick={() => window.location.href = '/about'}>Learn More</button>
+          </div>
+        </div>
+        <div className="hero-image">
+          <img src="/assets/hero-image.png" alt="Public Fund Management" />
         </div>
       </section>
 

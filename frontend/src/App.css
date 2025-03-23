@@ -1,6 +1,6 @@
 /* Global Styles */
 .App {
-  font-family: Arial, sans-serif;
+  font-family: 'Poppins', sans-serif;
   margin: 0;
   padding: 0;
   display: flex;
@@ -17,46 +17,117 @@
 
 /* Header Section */
 .header {
-  background-color: #003366;
+  background-color: #0d6efd;
   color: white;
   padding: 1rem 0;
-}
-
-.header .logo {
-  height: 50px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .header h1 {
   margin: 0;
-  font-size: 1.5rem;
+  font-size: 1.8rem;
+  font-weight: bold;
 }
 
 .nav {
   display: flex;
-  gap: 1rem;
+  gap: 1.5rem;
 }
 
 .nav a {
   color: white;
   text-decoration: none;
-  font-weight: bold;
+  font-weight: 500;
+  transition: color 0.3s ease;
 }
 
 .nav a:hover {
-  text-decoration: underline;
+  color: #ffcc00;
 }
 
-/* Main Content */
-.main-content {
-  flex: 1;
-  padding: 2rem;
-  background-color: #ffffff;
+/* Hero Section */
+.hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 3rem 1rem;
+  background: linear-gradient(135deg, #0d6efd, #6610f2);
+  color: white;
+}
+
+.hero h2 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.hero p {
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+}
+
+.cta-buttons button {
+  background-color: #ffcc00;
+  color: #0d6efd;
+  border: none;
+  padding: 0.8rem 1.5rem;
+  margin: 0.5rem;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.cta-buttons button:hover {
+  background-color: #e6b800;
+}
+
+/* Section Styling */
+.section {
+  padding: 3rem 1rem;
+  text-align: center;
+}
+
+.section h2 {
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  color: #333;
+}
+
+.objectives-grid, .benefits-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+
+.objective-item, .benefit-item {
+  background-color: white;
+  padding: 1.5rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.objective-item:hover, .benefit-item:hover {
+  transform: translateY(-5px);
+}
+
+.workflow-steps li {
+  margin-bottom: 1.5rem;
+}
+
+.workflow-steps h3 {
+  font-size: 1.2rem;
+  color: #0d6efd;
 }
 
 /* Footer Section */
 .footer {
-  background-color: #003366;
+  background-color: #0d6efd;
   color: white;
   text-align: center;
-  padding: 1rem;
+  padding: 1.5rem;
+  font-size: 0.9rem;
 }

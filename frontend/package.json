@@ -7,13 +7,13 @@
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.2.0",
     "@testing-library/user-event": "^13.5.0",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
+    "ajv": "^8.0.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
     "react-router-dom": "^7.4.0",
     "react-scripts": "^5.0.1",
     "web-vitals": "^2.1.4",
-    "ajv": "^8.0.0",
-    "web3": "^1.10.0"
+    "web3": "^4.16.0"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -41,6 +41,7 @@
   },
   "devDependencies": {
     "framer-motion": "^10.18.0",
-    "nodemon": "^3.1.9"
+    "nodemon": "^3.1.9",
+    "styled-components": "^5.3.10"
   }
 }

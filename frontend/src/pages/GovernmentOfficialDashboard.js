@@ -142,7 +142,7 @@ const GovernmentOfficialDashboard = () => {
   };
 
   return (
-    <div className={styles.container}>
+    <div className={styles.dashboardContainer}>
       <header className={styles.header}>
         <h1>Government Official Dashboard</h1>
         <p>Manage and oversee projects efficiently.</p>
@@ -153,67 +153,86 @@ const GovernmentOfficialDashboard = () => {
 
       {/* Create New Project */}
       <section className={styles.createProjectSection}>
-        <h2>Create New Project</h2>
-        <input
-          type="text"
-          placeholder="Project Name"
-          value={newProject.name}
-          onChange={(e) => setNewProject({ ...newProject, name: e.target.value })}
-        />
-        <input
-          type="number"
-          placeholder="Budget (in ETH)"
-          value={newProject.budget}
-          onChange={(e) => setNewProject({ ...newProject, budget: e.target.value })}
-        />
-        <input
-          type="text"
-          placeholder="Timeline"
-          value={newProject.timeline}
-          onChange={(e) => setNewProject({ ...newProject, timeline: e.target.value })}
-        />
-        <button onClick={createProject} disabled={loading}>
-          {loading ? 'Creating...' : 'Create Project'}
-        </button>
+        <div className={styles.projectForm}>
+          <h2>Create New Project</h2>
+          <div className={styles.formGroup}>
+            <input
+              type="text"
+              className={styles.inputField}
+              placeholder="Project Name"
+              value={newProject.name}
+              onChange={(e) => setNewProject({ ...newProject, name: e.target.value })}
+            />
+          </div>
+          <div className={styles.formGroup}>
+            <input
+              type="number"
+              className={styles.inputField}
+              placeholder="Budget (in ETH)"
+              value={newProject.budget}
+              onChange={(e) => setNewProject({ ...newProject, budget: e.target.value })}
+            />
+          </div>
+          <div className={styles.formGroup}>
+            <input
+              type="text"
+              className={styles.inputField}
+              placeholder="Timeline"
+              value={newProject.timeline}
+              onChange={(e) => setNewProject({ ...newProject, timeline: e.target.value })}
+            />
+          </div>
+          <button
+            className={styles.createButton}
+            onClick={createProject}
+            disabled={loading}
+          >
+            {loading ? 'Creating...' : 'Create Project'}
+          </button>
+        </div>
       </section>
 
       {/* Projects */}
       <section className={styles.projectsSection}>
-        <h2>Projects</h2>
-        {projects.length > 0 ? (
-          <ul className={styles.projectList}>
-            {projects.map((project) => (
-              <li key={project.id} className={styles.projectItem}>
-                <h3>{project.name}</h3>
-                <p>Budget: ₹{Web3.utils.fromWei(project.budget, 'ether')} ETH</p>
-                <p>Status: {project.status}</p>
-                <p>Timeline: {project.timeline}</p>
-                <p>Milestones:</p>
-                <ul>
-                  {project.milestones?.map((milestone) => (
-                    <li key={milestone.id}>
-                      {milestone.name} - Status: {milestone.status}
-                      <button
-                        onClick={() => approveMilestone(project.id, milestone.id)}
-                        disabled={loading}
-                      >
-                        Approve
-                      </button>
-                      <button
-                        onClick={() => rejectMilestone(project.id, milestone.id)}
-                        disabled={loading}
-                      >
-                        Reject
-                      </button>
-                    </li>
-                  ))}
-                </ul>
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <p>No projects available.</p>
-        )}
+        <div className={styles.projectsList}>
+          <h2>Projects</h2>
+          {projects.length > 0 ? (
+            <ul className={styles.projectItems}>
+              {projects.map((project) => (
+                <li key={project.id} className={styles.projectItem}>
+                  <h3>{project.name}</h3>
+                  <p>Budget: ₹{Web3.utils.fromWei(project.budget, 'ether')} ETH</p>
+                  <p>Status: {project.status}</p>
+                  <p>Timeline: {project.timeline}</p>
+                  <p>Milestones:</p>
+                  <ul>
+                    {project.milestones?.map((milestone) => (
+                      <li key={milestone.id}>
+                        {milestone.name} - Status: {milestone.status}
+                        <button
+                          className={`${styles.milestoneButton} ${styles.approve}`}
+                          onClick={() => approveMilestone(project.id, milestone.id)}
+                          disabled={loading}
+                        >
+                          Approve
+                        </button>
+                        <button
+                          className={`${styles.milestoneButton} ${styles.reject}`}
+                          onClick={() => rejectMilestone(project.id, milestone.id)}
+                          disabled={loading}
+                        >
+                          Reject
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className={styles.noProjects}>No projects available.</p>
+          )}
+        </div>
       </section>
     </div>
   );

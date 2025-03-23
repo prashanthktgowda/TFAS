@@ -1,0 +1,133 @@
+.homeContainer {
+  font-family: 'Arial', sans-serif;
+  background-color: #000;
+  color: #fff;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.header {
+  background-color: #003366;
+  color: white;
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header nav a {
+  color: white;
+  text-decoration: none;
+  margin: 0 1rem;
+  font-weight: bold;
+}
+
+.header nav a:hover {
+  text-decoration: underline;
+}
+
+.hero {
+  background: linear-gradient(to right, #000, #333);
+  color: #fff;
+  text-align: center;
+  padding: 4rem 2rem;
+}
+
+.heroContent {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.heroContent h1 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.heroContent p {
+  font-size: 1.25rem;
+  margin-bottom: 2rem;
+}
+
+.ctaButtons button {
+  background-color: #ffcc00;
+  color: #000;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  margin: 0.5rem;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.ctaButtons button:hover {
+  background-color: #e6b800;
+}
+
+.section {
+  padding: 2rem;
+  background-color: #111;
+}
+
+.objectivesGrid, .benefitsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.objectiveItem, .benefitItem {
+  background-color: #222;
+  padding: 1rem;
+  border-radius: 5px;
+  text-align: center;
+}
+
+.workflowSteps {
+  list-style: none;
+  padding: 0;
+}
+
+.workflowSteps li {
+  margin-bottom: 1rem;
+  background-color: #222;
+  padding: 1rem;
+  border-radius: 5px;
+}
+
+.impactList {
+  list-style: none;
+  padding: 0;
+}
+
+.impactList li {
+  margin-bottom: 1rem;
+  background-color: #222;
+  padding: 1rem;
+  border-radius: 5px;
+}
+
+.notificationSuccess {
+  background-color: #28a745;
+  color: #fff;
+  padding: 1rem;
+  border-radius: 5px;
+  margin-bottom: 1rem;
+}
+
+.notificationError {
+  background-color: #dc3545;
+  color: #fff;
+  padding: 1rem;
+  border-radius: 5px;
+  margin-bottom: 1rem;
+}
+
+.footer {
+  background-color: #003366;
+  color: white;
+  text-align: center;
+  padding: 1rem;
+}

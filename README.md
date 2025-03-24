@@ -10,7 +10,8 @@ This project is a blockchain-based application for managing public fund allocati
 
 You can add an image of the first page of the application below:
 
-![First Page Preview](./path-to-your-image.png) <!-- Replace 'path-to-your-image.png' with the actual path to your image -->
+![Uploading image.png…]()
+
 
 ## Available Scripts
 

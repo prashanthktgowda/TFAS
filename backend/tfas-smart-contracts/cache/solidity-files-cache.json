@@ -70,6 +70,41 @@
       "artifacts": [
         "FundAllocation"
       ]
+    },
+    "/home/prashanthktgowda/academics_project/GFMS/TFAS/backend/tfas-smart-contracts/contracts/UserManagement.sol": {
+      "lastModificationDate": 1742782011147,
+      "contentHash": "aa3bb3c56fbd6f2342be3a55680d75d4",
+      "sourceName": "contracts/UserManagement.sol",
+      "solcConfig": {
+        "version": "0.8.19",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "UserManagement"
+      ]
     }
   }
 }

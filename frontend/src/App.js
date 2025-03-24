@@ -15,7 +15,7 @@ import './App.css';
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:5000/api';
 const BLOCKCHAIN_PROVIDER = process.env.REACT_APP_BLOCKCHAIN_PROVIDER || 'http://127.0.0.1:7545';
-const CONTRACT_ADDRESS = process.env.REACT_APP_CONTRACT_ADDRESS;
+const CONTRACT_ADDRESS = process.env.REACT_APP_CONTRACT_ADDRESS || '0xca8F8Df5676EF8Fb2B2dcc45e696020339670dB0'; // Ensure consistency
 
 function App() {
   const [web3, setWeb3] = useState(null);
@@ -163,8 +163,14 @@ function App() {
                 />
               }
             />
-            <Route path="/signup" element={<Signup />} />
-            <Route path="/signin" element={<Signin />} />
+            <Route
+              path="/signup"
+              element={<Signup contractInstance={contractInstance} account={account} />}
+            />
+            <Route
+              path="/signin"
+              element={<Signin contractInstance={contractInstance} account={account} />}
+            />
             <Route path="*" element={<NotFound />} />
           </Routes>
         )}

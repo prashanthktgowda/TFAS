@@ -4,6 +4,8 @@
   margin: 0;
   padding: 0;
   background-color: #f9f9f9;
+  position: relative;
+  overflow: hidden;
 }
 
 /* Hero Section */
@@ -15,6 +17,9 @@
   padding: 3rem 1rem;
   background: linear-gradient(135deg, #0d6efd, #6610f2);
   color: white;
+  position: relative;
+  z-index: 1;
+  animation: fadeIn 2s ease-in-out;
 }
 
 .hero-content {
@@ -25,11 +30,13 @@
   font-size: 2.5rem;
   font-weight: bold;
   margin-bottom: 1rem;
+  animation: slideInFromLeft 1.5s ease-in-out;
 }
 
 .hero p {
   font-size: 1.2rem;
   margin-bottom: 2rem;
+  animation: slideInFromRight 1.5s ease-in-out;
 }
 
 .cta-buttons {
@@ -46,11 +53,12 @@
   border-radius: 5px;
   font-size: 1rem;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
 .cta-buttons button:hover {
   background-color: #e6b800;
+  transform: scale(1.1);
 }
 
 .hero-image {
@@ -60,4 +68,175 @@
 .hero-image img {
   max-width: 100%;
   height: auto;
+}
+
+/* Flowchart Section */
+.flowchart-section {
+  padding: 3rem 1rem;
+  text-align: center;
+  background-color: #ffffff;
+}
+
+.flowchart-section h2 {
+  font-size: 2rem;
+  margin-bottom: 2rem;
+  color: #333;
+  animation: fadeIn 2s ease-in-out;
+}
+
+.flowchart {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+.flowchart-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #f1f8ff;
+  border: 2px solid #0d6efd;
+  border-radius: 10px;
+  padding: 1.5rem;
+  width: 80%;
+  max-width: 600px;
+  margin-bottom: 2rem;
+  position: relative;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  animation: bounceIn 1.5s ease-in-out;
+}
+
+.flowchart-step h3 {
+  font-size: 1.5rem;
+  color: #0d6efd;
+  margin-bottom: 0.5rem;
+}
+
+.flowchart-step p {
+  font-size: 1rem;
+  color: #555;
+}
+
+.flowchart-step::after {
+  content: '';
+  position: absolute;
+  bottom: -2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 2px;
+  height: 2rem;
+  background-color: #0d6efd;
+}
+
+.flowchart-step:last-child::after {
+  display: none;
+}
+
+/* Background Animation */
+.animated-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.animated-background .building,
+.animated-background .road,
+.animated-background .tower {
+  position: absolute;
+  animation: float 6s ease-in-out infinite;
+}
+
+.animated-background .building {
+  width: 100px;
+  height: 150px;
+  background: #e0f7fa;
+  border-radius: 5px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  top: 20%;
+  left: 10%;
+  animation-delay: 0s;
+}
+
+.animated-background .road {
+  width: 200px;
+  height: 20px;
+  background: #b0bec5;
+  border-radius: 10px;
+  top: 50%;
+  left: 30%;
+  animation-delay: 1s;
+}
+
+.animated-background .tower {
+  width: 50px;
+  height: 200px;
+  background: #c5cae9;
+  border-radius: 5px;
+  top: 10%;
+  left: 70%;
+  animation-delay: 2s;
+}
+
+/* Animation Keyframes */
+@keyframes float {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+/* Keyframes for Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideInFromLeft {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideInFromRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes bounceIn {
+  0% {
+    transform: scale(0.5);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.2);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+  }
 }

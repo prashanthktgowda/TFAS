@@ -3,7 +3,7 @@ import Web3 from 'web3';
 import contractABI from '../abi/contractABI.json'; // Correct path to ABI
 import styles from '../styles/GovernmentOfficialDashboard.module.css';
 
-const contractAddress = process.env.REACT_APP_CONTRACT_ADDRESS; // Use the contract address from .env
+const contractAddress = process.env.REACT_APP_CONTRACT_ADDRESS || '0xca8F8Df5676EF8Fb2B2dcc45e696020339670dB0'; // Ensure consistency
 const blockchainProvider = process.env.REACT_APP_BLOCKCHAIN_PROVIDER || 'http://127.0.0.1:7545'; // Default to Ganache
 
 const GovernmentOfficialDashboard = () => {

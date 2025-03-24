@@ -42,10 +42,40 @@ async function deployContract() {
         /CONTRACT_ADDRESS=.*/,
         `CONTRACT_ADDRESS=${deployedAddress}`
     );
+    envContent = envContent.replace(
+        /FUND_ALLOCATION_ADDRESS=.*/,
+        `FUND_ALLOCATION_ADDRESS=${deployedAddress}` // Updated FundAllocation address
+    );
     fs.writeFileSync(envPath, envContent);
 
     return deployedAddress;
 }
+
+async function main() {
+  const [deployer] = await ethers.getSigners();
+  console.log("Deploying contracts with the account:", deployer.address);
+
+  const UserManagement = await ethers.getContractFactory("UserManagement");
+  const userManagement = await UserManagement.deploy();
+
+  console.log("UserManagement contract deployed to:", userManagement.address);
+
+  // Update .env file with new contract address
+  const envPath = path.join(__dirname, '../backend/.env');
+  let envContent = fs.readFileSync(envPath, 'utf8');
+  envContent = envContent.replace(
+    /CONTRACT_ADDRESS=.*/,
+    `CONTRACT_ADDRESS=${userManagement.address}` // Ensure consistency
+  );
+  fs.writeFileSync(envPath, envContent);
+}
+
+main()
+  .then(() => process.exit(0))
+  .catch((error) => {
+    console.error(error);
+    process.exit(1);
+  });
 
 deployContract()
     .then(() => process.exit(0))

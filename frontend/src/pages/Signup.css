@@ -1,0 +1,128 @@
+/* General Styles */
+.signup-container {
+  display: flex;
+  height: 100vh;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* Left Section */
+.signup-left {
+  flex: 1;
+  background: linear-gradient(135deg, #0d6efd, #6610f2);
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+  text-align: center;
+}
+
+.signup-left h1 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.signup-left p {
+  font-size: 1.2rem;
+  line-height: 1.5;
+}
+
+/* Right Section */
+.signup-right {
+  flex: 1;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+  box-shadow: -2px 0 6px rgba(0, 0, 0, 0.1);
+}
+
+.signup-right h2 {
+  font-size: 1.8rem;
+  margin-bottom: 1.5rem;
+  color: #333;
+}
+
+.google-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  border: 1px solid #ccc;
+  padding: 0.8rem 1.5rem;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.google-button img {
+  width: 20px;
+  margin-right: 0.5rem;
+}
+
+.google-button:hover {
+  background-color: #f9f9f9;
+}
+
+.divider {
+  margin: 1.5rem 0;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.signup-form {
+  width: 100%;
+  max-width: 300px;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.signup-form input {
+  width: 100%;
+  padding: 0.8rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  transition: border-color 0.3s ease;
+}
+
+.signup-form input:focus {
+  border-color: #0d6efd;
+  outline: none;
+}
+
+.continue-button {
+  background-color: #0d6efd;
+  color: white;
+  border: none;
+  padding: 0.8rem;
+  font-size: 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.continue-button:hover {
+  background-color: #0056b3;
+}
+
+.terms {
+  margin-top: 1rem;
+  font-size: 0.8rem;
+  color: #666;
+  text-align: center;
+}
+
+.terms a {
+  color: #0d6efd;
+  text-decoration: none;
+}
+
+.terms a:hover {
+  text-decoration: underline;
+}

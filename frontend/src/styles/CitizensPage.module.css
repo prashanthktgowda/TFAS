@@ -2,7 +2,7 @@
 .container {
     font-family: Arial, sans-serif;
     margin: 0;
-    padding: 0;
+    padding: 20px;
     display: flex;
     flex-direction: column;
     min-height: 100vh;
@@ -16,16 +16,19 @@
     color: white;
     text-align: center;
     padding: 1rem 0;
+    margin-bottom: 20px;
   }
   
   .header h1 {
     margin: 0;
-    font-size: 1.5rem;
+    font-size: 2rem;
+    color: #333;
   }
   
   .header p {
     margin-top: 0.5rem;
-    font-size: 0.9rem;
+    font-size: 1rem;
+    color: #666;
   }
   
   /* Error Message Styles */
@@ -40,7 +43,7 @@
     text-align: center;
     margin-top: 1rem;
     font-style: italic;
-    color: #666;
+    color: #007bff;
   }
   
   /* Public Dashboard Styles */
@@ -51,6 +54,7 @@
     background: white;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
   }
   
   .dashboardSection h2 {
@@ -62,20 +66,23 @@
   .projectList {
     list-style-type: none;
     padding: 0;
+    list-style: none;
   }
   
   .projectItem {
-    padding: 0.75rem;
-    margin-bottom: 0.5rem;
-    background-color: #f0f8ff;
-    border-radius: 4px;
+    padding: 15px;
+    margin-bottom: 10px;
+    background-color: #fff;
+    border-radius: 8px;
     border-left: 4px solid #007bff;
     cursor: pointer;
     transition: background-color 0.3s ease;
+    border: 1px solid #ddd;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
   
   .projectItem:hover {
-    background-color: #e0f3ff;
+    background-color: #f0f8ff;
   }
   
   .noProjects {
@@ -100,11 +107,13 @@
   
   .modalContent {
     background: white;
-    padding: 1.5rem;
+    padding: 20px;
     border-radius: 8px;
     width: 90%;
     max-width: 500px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 400px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   }
   
   .modalContent h3 {
@@ -114,25 +123,29 @@
   
   .feedbackInput {
     width: 100%;
-    padding: 0.75rem;
+    padding: 10px;
     margin: 1rem 0;
     border: 1px solid #ccc;
     border-radius: 4px;
     resize: vertical;
     min-height: 100px;
+    margin-top: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
   }
   
   .modalActions {
     display: flex;
     justify-content: space-between;
     margin-top: 1rem;
+    margin-top: 10px;
   }
   
   .submitButton {
-    background-color: #28a745;
+    background-color: #007bff;
     color: white;
     border: none;
-    padding: 0.75rem 1rem;
+    padding: 10px 15px;
     border-radius: 4px;
     cursor: pointer;
     transition: background-color 0.3s ease;
@@ -150,10 +163,11 @@
   .closeButton {
     background-color: #ccc;
     border: none;
-    padding: 0.75rem 1rem;
+    padding: 10px 15px;
     border-radius: 4px;
     cursor: pointer;
     transition: background-color 0.3s ease;
+    color: #333;
   }
   
   .closeButton:hover {
@@ -168,6 +182,7 @@
     background: white;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
   }
   
   .notificationsSection h2 {
@@ -179,14 +194,17 @@
   .notificationList {
     list-style-type: none;
     padding: 0;
+    list-style: none;
   }
   
   .notificationItem {
-    padding: 0.75rem;
-    margin-bottom: 0.5rem;
-    background-color: #f0f8ff;
+    padding: 15px;
+    margin-bottom: 10px;
+    background-color: #fff;
     border-radius: 4px;
     border-left: 4px solid #007bff;
+    border: 1px solid #ddd;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
   
   .noNotifications {
@@ -204,6 +222,6 @@
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     text-align: center;
+    margin-bottom: 20px;
   }
-  
-  
+

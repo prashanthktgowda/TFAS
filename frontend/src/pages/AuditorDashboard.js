@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState, useRef } from 'react';
 import Web3 from 'web3';
 import contractABI from '/home/prashanthktgowda/academics_project/GFMS/TFAS/frontend/src/abi/contractABI.json'; // Ensure this path is correct
@@ -141,7 +140,7 @@ const AuditorDashboard = () => {
             {projects.map((project) => (
               <li key={project.id} className={styles.projectItem}>
                 <h3>{project.name}</h3>
-                <p>Budget: ₹{project.budget}</p>
+                <p>Budget: ₹{Web3.utils.fromWei(project.budget, 'ether')} ETH</p>
                 <p>Timeline: {project.timeline}</p>
                 <p>Milestones:</p>
                 <ul>

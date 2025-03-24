@@ -113,7 +113,7 @@ const CitizenInfo = () => {
             {projects.map((project, index) => (
               <li key={index} className={styles.projectItem}>
                 <div>
-                  <strong>{project.name}</strong> - Budget: ₹{project.budget}, Progress: {project.progress}%
+                  <strong>{project.name}</strong> - Budget: ₹{Web3.utils.fromWei(project.budget, 'ether')} ETH, Progress: {project.progress}%
                 </div>
                 <textarea
                   placeholder="Provide feedback"

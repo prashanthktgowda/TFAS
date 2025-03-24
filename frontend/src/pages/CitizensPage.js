@@ -159,7 +159,7 @@ const CitizensPage = () => {
               }}
               className={styles.projectItem}
             >
-              <strong>{project.name}</strong> - Budget: ₹{project.budget}
+              <strong>{project.name}</strong> - Budget: ₹{Web3.utils.fromWei(project.budget, 'ether')} ETH
             </li>
           ))}
         </ul>

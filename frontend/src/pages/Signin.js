@@ -1,45 +1,65 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import './Auth.css';
+import Web3 from 'web3';
+import './Signup.css'; // Reuse the same styles as Signup
 
-const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:5000/api';
+const Signin = ({ contractInstance, account }) => {
+  const [email, setEmail] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState('');
 
-const Signin = () => {
-  const [formData, setFormData] = useState({ email: '', password: '' });
-  const [error, setError] = useState('');
-  const navigate = useNavigate();
-
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = async (e) => {
+  const handleSignin = async (e) => {
     e.preventDefault();
+    if (!email) {
+      setMessage('Please enter your email.');
+      return;
+    }
+
     try {
-      const response = await fetch(`${API_BASE_URL}/auth/signin`, {
+      setLoading(true);
+      setMessage('');
+
+      const response = await fetch('/api/signin', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({ email }),
       });
-      if (!response.ok) throw new Error('Sign-in failed');
+
       const data = await response.json();
-      localStorage.setItem('token', data.token);
-      alert('Sign-in successful');
-      navigate('/');
+      if (response.ok) {
+        setMessage(data.message);
+      } else {
+        setMessage(data.message || 'Signin failed. Please try again.');
+      }
     } catch (err) {
-      setError(err.message);
+      console.error('Error during signin:', err);
+      setMessage('Signin failed. Please try again.');
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="auth-container">
-      <h2>Sign-In</h2>
-      {error && <p className="error">{error}</p>}
-      <form onSubmit={handleSubmit}>
-        <input type="email" name="email" placeholder="Email" onChange={handleChange} required />
-        <input type="password" name="password" placeholder="Password" onChange={handleChange} required />
-        <button type="submit">Sign-In</button>
-      </form>
+    <div className="signup-container">
+      <div className="signup-left">
+        <h1>Welcome Back</h1>
+        <p>Sign in to manage or participate in public fund allocation projects.</p>
+      </div>
+      <div className="signup-right">
+        <h2>Signin</h2>
+        <form className="signup-form" onSubmit={handleSignin}>
+          <input
+            type="email"
+            placeholder="Your Email Address"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+          <button type="submit" className="continue-button" disabled={loading}>
+            {loading ? 'Signing In...' : 'Sign In'}
+          </button>
+        </form>
+        {message && <p className="message">{message}</p>}
+      </div>
     </div>
   );
 };

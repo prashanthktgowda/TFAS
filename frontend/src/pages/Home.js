@@ -1,9 +1,16 @@
 import React from 'react';
-import './Home.css'; // Import the new CSS file for styling
+import './Home.css'; // Import the updated CSS file
 
 const Home = () => {
   return (
     <div className="home-container">
+      {/* City Background */}
+      <div className="city-background">
+        <div className="building"></div>
+        <div className="road"></div>
+        <div className="tower"></div>
+      </div>
+
       {/* Hero Section */}
       <section className="hero">
         <div className="hero-content">
@@ -42,31 +49,31 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Workflow Section */}
-      <section id="workflow" className="section">
+      {/* Flowchart Section */}
+      <section className="flowchart-section">
         <h2>How It Works</h2>
-        <ol className="workflow-steps">
-          <li>
+        <div className="flowchart">
+          <div className="flowchart-step">
             <h3>Government Approves Budget</h3>
             <p>Funds are allocated for a public development project.</p>
-          </li>
-          <li>
+          </div>
+          <div className="flowchart-step">
             <h3>Funds Tokenized on Blockchain</h3>
             <p>Funds are represented as digital tokens and tracked in real time.</p>
-          </li>
-          <li>
+          </div>
+          <div className="flowchart-step">
             <h3>Smart Contracts Automate Payments</h3>
             <p>Payments are released only after milestones are verified.</p>
-          </li>
-          <li>
+          </div>
+          <div className="flowchart-step">
             <h3>Real-Time Monitoring</h3>
             <p>Stakeholders can track fund usage and project progress.</p>
-          </li>
-          <li>
+          </div>
+          <div className="flowchart-step">
             <h3>Immutable Audit Trail</h3>
             <p>All transactions are recorded on the blockchain for accountability.</p>
-          </li>
-        </ol>
+          </div>
+        </div>
       </section>
 
       {/* Benefits Section */}
